@@ -1,0 +1,16 @@
+---
+name: silver-pong-prod
+services:
+  app:
+    container_name: silver-pong-prod-c
+    image: silver-pong-prod-i:3.5
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+        - "8020:80"
+
+# docker image tag silver-pong-prod-i:3.5 silveira42/landing-page:3.5
+# docker image tag silver-pong-prod-i:3.5 silveira42/landing-page:latest
+# docker push silveira42/landing-page:3.5
+# docker push silveira42/landing-page:latest

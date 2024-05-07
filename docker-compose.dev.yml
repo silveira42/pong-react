@@ -1,0 +1,14 @@
+---
+name: silver-pong-dev
+services:
+  app:
+    container_name: silver-pong-dev-c
+    image: silver-pong-dev-i
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+    ports:
+      - "3031:3000"
