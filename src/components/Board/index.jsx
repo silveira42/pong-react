@@ -53,7 +53,6 @@ function Board() {
 	};
 
 	useKeyPressEvent('p', () => {
-		console.log('p pressed');
 		setIsRunning(false);
 	});
 
