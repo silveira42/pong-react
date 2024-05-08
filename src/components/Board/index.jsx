@@ -87,7 +87,7 @@ function Board() {
 			opponentSpeed = 0.1;
 		}
 		if (opponentDifficulty === 3) {
-			opponentSpeed = 0.3;
+			opponentSpeed = 0.2;
 		}
 		if (opponentDifficulty === 10) {
 			opponentSpeed = 1;
@@ -204,8 +204,8 @@ function Board() {
 		}
 
 		setBallPosition({
-			x: ballPosition.x + ballSpeed * ballVelocityCpy.x,
-			y: ballPosition.y + ballSpeed * ballVelocityCpy.y,
+			x: ballPositionCpy.x + ballSpeed * ballVelocityCpy.x,
+			y: ballPositionCpy.y + ballSpeed * ballVelocityCpy.y,
 		});
 
 		setBallVelocity(ballVelocityCpy);
