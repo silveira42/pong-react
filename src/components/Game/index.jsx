@@ -26,7 +26,7 @@ const initialOpponentPosition = {
 
 const initialPlayerSpeed = 10;
 const initialOpponentDifficulty = 2; //1, 2 ou 3.
-const initialBallSpeed = 3;
+const initialBallSpeed = 4;
 
 const playerSpeedStep = 1;
 const opponentDifficultyStep = 1;
@@ -102,7 +102,7 @@ function Game() {
 	}
 
 	function handleBallSpeedIncrease() {
-		setBallSpeed(ballSpeed >= 5 ? ballSpeed : ballSpeed + ballSpeedStep);
+		setBallSpeed(ballSpeed >= 6 ? ballSpeed : ballSpeed + ballSpeedStep);
 	}
 
 	function handleBallSpeedDecrease() {

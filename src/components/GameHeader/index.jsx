@@ -4,8 +4,8 @@ import './styles.css';
 export default function GameHeader(props) {
 	return (
 		<div className='game-header-container'>
-			<div className='score'>
-				<h2>
+			<div className='score-container'>
+				<h2 className='score'>
 					{props.score.player} - {props.score.opponent}
 				</h2>
 			</div>
