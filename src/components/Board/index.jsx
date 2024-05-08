@@ -11,11 +11,16 @@ const width = parseFloat(visualViewport.width * 0.7);
 const paddleWidth = 20;
 const paddleHeight = 100;
 const ballSize = 20;
-const speed = 3;
+const ballSpeedStep = 0.5;
 
 const initialBallPosition = { x: width / 2, y: height / 2 - ballSize / 2 };
 
 const initialBallVelocity = { x: 1, y: 1 };
+
+const initialPlayerSpeed = 7;
+const playerSpeedStep = 1;
+const initialOpponentDifficulty = 2; //1, 2 ou 3.
+const opponentDifficultyStep = 1;
 
 const initialPlayerPosition = {
 	x: paddleWidth,
@@ -37,9 +42,14 @@ var AABBIntersect = function (ax, ay, aw, ah, bx, by, bw, bh) {
 };
 
 function Board() {
+	const [ballSpeed, setBallSpeed] = React.useState(3);
 	const [isPaused, setIsPaused] = React.useState(false);
 	const [ballPosition, setBallPosition] = React.useState(initialBallPosition);
 	const [ballVelocity, setBallVelocity] = React.useState(initialBallVelocity);
+	const [playerSpeed, setPlayerSpeed] = React.useState(initialPlayerSpeed);
+	const [opponentDifficulty, setOpponentDifficulty] = React.useState(
+		initialOpponentDifficulty
+	);
 	const [playerPosition, setPlayerPosition] = React.useState(
 		initialPlayerPosition
 	);
@@ -68,7 +78,22 @@ function Board() {
 
 		let opponentY = opponentPosition.y;
 		// ease the movement towards the ideal position
-		opponentY += (destiny - opponentY) * 0.1;
+		let opponentSpeed = 0;
+
+		if (opponentDifficulty === 1) {
+			opponentSpeed = 0.05;
+		}
+		if (opponentDifficulty === 2) {
+			opponentSpeed = 0.1;
+		}
+		if (opponentDifficulty === 3) {
+			opponentSpeed = 0.3;
+		}
+		if (opponentDifficulty === 10) {
+			opponentSpeed = 1;
+		}
+
+		opponentY += (destiny - opponentY) * opponentSpeed;
 		// keep the paddle inside of the canvas
 		opponentY = Math.max(Math.min(opponentY, height - paddleHeight), 0);
 
@@ -84,8 +109,8 @@ function Board() {
 	function updatePlayer() {
 		let playerY = playerPosition.y;
 
-		if (arrowUpPressed) playerY -= 7;
-		if (arrowDownPressed) playerY += 7;
+		if (arrowUpPressed) playerY -= playerSpeed;
+		if (arrowDownPressed) playerY += playerSpeed;
 		// keep the paddle inside of the canvas
 		playerY = Math.max(Math.min(playerY, height - paddleHeight), 0);
 
@@ -99,7 +124,7 @@ function Board() {
 		const ballVelocityCpy = { ...ballVelocity };
 
 		ballVelocityCpy.x = lastServePlayer ? 1 : -1;
-		ballVelocityCpy.y = speed * Math.random();
+		ballVelocityCpy.y = ballSpeed * Math.random();
 
 		setBallPosition(initialBallPosition);
 		setBallVelocity(ballVelocityCpy);
@@ -170,13 +195,13 @@ function Board() {
 			const smash = Math.abs(phi) > 0.2 * pi ? 1.5 : 1;
 
 			ballVelocityCpy.x =
-				smash * (paddleName === 'player' ? 1 : -1) * speed * Math.cos(phi);
-			ballVelocityCpy.y = smash * speed * Math.sin(phi);
+				smash * (paddleName === 'player' ? 1 : -1) * ballSpeed * Math.cos(phi);
+			ballVelocityCpy.y = smash * ballSpeed * Math.sin(phi);
 		}
 
 		setBallPosition({
-			x: ballPosition.x + speed * ballVelocityCpy.x,
-			y: ballPosition.y + speed * ballVelocityCpy.y,
+			x: ballPosition.x + ballSpeed * ballVelocityCpy.x,
+			y: ballPosition.y + ballSpeed * ballVelocityCpy.y,
 		});
 
 		setBallVelocity(ballVelocityCpy);
@@ -194,10 +219,80 @@ function Board() {
 
 	return (
 		<div className='board-container'>
-			<div className='score'>
-				<h2>
-					{score.player} - {score.opponent}
-				</h2>
+			<div className='board-header'>
+				<div className='score'>
+					<h2>
+						{score.player} - {score.opponent}
+					</h2>
+				</div>
+				<div className='player-paddle-speed'>
+					<h2>Player Speed: {playerSpeed}</h2>
+					<button
+						onClick={() =>
+							setPlayerSpeed(
+								playerSpeed >= 10 ? playerSpeed : playerSpeed + playerSpeedStep
+							)
+						}
+					>
+						Increase player speed
+					</button>
+					<button
+						onClick={() =>
+							setPlayerSpeed(
+								playerSpeed <= 5 ? playerSpeed : playerSpeed - playerSpeedStep
+							)
+						}
+					>
+						Decrease player speed
+					</button>
+				</div>
+				<div className='opponent-difficulty'>
+					<h2>Opponent Difficulty: {opponentDifficulty}</h2>
+					<button
+						onClick={() =>
+							setOpponentDifficulty(
+								opponentDifficulty >= 3
+									? opponentDifficulty
+									: opponentDifficulty + opponentDifficultyStep
+							)
+						}
+					>
+						Increase difficulty
+					</button>
+					<button
+						onClick={() =>
+							setOpponentDifficulty(
+								opponentDifficulty <= 1
+									? opponentDifficulty
+									: opponentDifficulty - opponentDifficultyStep
+							)
+						}
+					>
+						Decrease difficulty
+					</button>
+					<button onClick={() => setOpponentDifficulty(10)}>Impossible</button>
+				</div>
+				<div className='ball-speed'>
+					<h2>Ball Speed: {ballSpeed}</h2>
+					<button
+						onClick={() =>
+							setBallSpeed(
+								ballSpeed >= 5 ? ballSpeed : ballSpeed + ballSpeedStep
+							)
+						}
+					>
+						Increase Speed
+					</button>
+					<button
+						onClick={() =>
+							setBallSpeed(
+								ballSpeed <= 1 ? ballSpeed : ballSpeed - ballSpeedStep
+							)
+						}
+					>
+						Decrease Speed
+					</button>
+				</div>
 			</div>
 			<div className='board' style={{ width: width, height: height }}>
 				<Paddle position={playerPosition} />
@@ -207,7 +302,7 @@ function Board() {
 					<button
 						className='board-resume-button'
 						onClick={() => {
-							setIsPaused(true);
+							setIsPaused(false);
 						}}
 					>
 						Resume
