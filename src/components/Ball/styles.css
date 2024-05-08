@@ -1,0 +1,6 @@
+.ball-container{
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	background-color: #fff;
+}
