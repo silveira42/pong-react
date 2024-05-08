@@ -135,9 +135,13 @@ function Board() {
 		let ballVelocityCpy = { ...ballVelocity };
 		let ballPositionCpy = { ...ballPosition };
 
-		// if going to hit top or bottom, invert y direction
-		if (ballPosition.y > height - ballSize || ballPosition.y <= 0) {
-			ballVelocityCpy.y = ballVelocity.y * -1;
+		// if going to hit top invert y direction
+		if (ballPosition.y >= height - ballSize) {
+			ballVelocityCpy.y = -Math.abs(ballVelocity.y);
+		}
+		// if going to hit bottom, invert y direction
+		if (ballPosition.y <= 0) {
+			ballVelocityCpy.y = Math.abs(ballVelocity.y);
 		}
 
 		// if going to hit edge, serve and award point
