@@ -1,6 +1,4 @@
-.paddle-container{
+.paddle {
 	position: absolute;
-	height: 100px;
-	width: 20px;
 	background-color: #fff;
 }

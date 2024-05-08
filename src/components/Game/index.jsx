@@ -1,33 +1,36 @@
 import React from 'react';
 import Board from '../../components/Board';
 import './styles.css';
+import GameHeader from '../GameHeader';
 
-const height = parseFloat(visualViewport.height * 0.7);
-const width = parseFloat(visualViewport.width * 0.7);
+const boardHeight = parseFloat(visualViewport.height * 0.6);
+const boardWidth = parseFloat(visualViewport.width * 0.6);
 
 const paddleHeight = 100;
 const paddleWidth = 20;
 const ballSize = 20;
 
-const initialBallPosition = { x: width / 2, y: height / 2 - ballSize / 2 };
+const initialBallPosition = {
+	x: boardWidth / 2,
+	y: boardHeight / 2 - ballSize / 2,
+};
 const initialBallVelocity = { x: 1, y: 1 };
+const initialPlayerPosition = {
+	x: paddleWidth * 2,
+	y: boardHeight / 2 - paddleHeight / 2,
+};
+const initialOpponentPosition = {
+	x: boardWidth - paddleWidth * 3,
+	y: boardHeight / 2 - paddleHeight / 2,
+};
+
 const initialPlayerSpeed = 10;
 const initialOpponentDifficulty = 2; //1, 2 ou 3.
-
 const initialBallSpeed = 3;
+
 const playerSpeedStep = 1;
 const opponentDifficultyStep = 1;
 const ballSpeedStep = 0.5;
-
-const initialPlayerPosition = {
-	x: paddleWidth,
-	y: height / 2 - paddleHeight / 2,
-};
-
-const initialOpponentPosition = {
-	x: width - paddleWidth * 2,
-	y: height / 2 - paddleHeight / 2,
-};
 
 const initialScore = {
 	player: 0,
@@ -70,86 +73,59 @@ function Game() {
 		};
 	}, []);
 
+	function handlePlayerSpeedIncrease() {
+		setPlayerSpeed(
+			playerSpeed >= 15 ? playerSpeed : playerSpeed + playerSpeedStep
+		);
+	}
+
+	function handlePlayerSpeedDecrease() {
+		setPlayerSpeed(
+			playerSpeed <= 5 ? playerSpeed : playerSpeed - playerSpeedStep
+		);
+	}
+
+	function handleOpponentDifficultyIncrease() {
+		setOpponentDifficulty(
+			opponentDifficulty >= 3
+				? opponentDifficulty
+				: opponentDifficulty + opponentDifficultyStep
+		);
+	}
+
+	function handleOpponentDifficultyDecrease() {
+		setOpponentDifficulty(
+			opponentDifficulty <= 1
+				? opponentDifficulty
+				: opponentDifficulty - opponentDifficultyStep
+		);
+	}
+
+	function handleBallSpeedIncrease() {
+		setBallSpeed(ballSpeed >= 5 ? ballSpeed : ballSpeed + ballSpeedStep);
+	}
+
+	function handleBallSpeedDecrease() {
+		setBallSpeed(ballSpeed <= 1 ? ballSpeed : ballSpeed - ballSpeedStep);
+	}
+
 	return (
 		<div className='game-container'>
-			<div className='board-header'>
-				<div className='score'>
-					<h2>
-						{score.player} - {score.opponent}
-					</h2>
-				</div>
-				<div className='player-paddle-speed'>
-					<h2>Player Speed: {playerSpeed}</h2>
-					<button
-						onClick={() =>
-							setPlayerSpeed(
-								playerSpeed >= 10 ? playerSpeed : playerSpeed + playerSpeedStep
-							)
-						}
-					>
-						Increase player speed
-					</button>
-					<button
-						onClick={() =>
-							setPlayerSpeed(
-								playerSpeed <= 5 ? playerSpeed : playerSpeed - playerSpeedStep
-							)
-						}
-					>
-						Decrease player speed
-					</button>
-				</div>
-				<div className='opponent-difficulty'>
-					<h2>Opponent Difficulty: {opponentDifficulty}</h2>
-					<button
-						onClick={() =>
-							setOpponentDifficulty(
-								opponentDifficulty >= 3
-									? opponentDifficulty
-									: opponentDifficulty + opponentDifficultyStep
-							)
-						}
-					>
-						Increase difficulty
-					</button>
-					<button
-						onClick={() =>
-							setOpponentDifficulty(
-								opponentDifficulty <= 1
-									? opponentDifficulty
-									: opponentDifficulty - opponentDifficultyStep
-							)
-						}
-					>
-						Decrease difficulty
-					</button>
-					<button onClick={() => setOpponentDifficulty(10)}>Impossible</button>
-				</div>
-				<div className='ball-speed'>
-					<h2>Ball Speed: {ballSpeed}</h2>
-					<button
-						onClick={() =>
-							setBallSpeed(
-								ballSpeed >= 5 ? ballSpeed : ballSpeed + ballSpeedStep
-							)
-						}
-					>
-						Increase Speed
-					</button>
-					<button
-						onClick={() =>
-							setBallSpeed(
-								ballSpeed <= 1 ? ballSpeed : ballSpeed - ballSpeedStep
-							)
-						}
-					>
-						Decrease Speed
-					</button>
-				</div>
-			</div>
+			<GameHeader
+				score={score}
+				playerSpeed={playerSpeed}
+				opponentDifficulty={opponentDifficulty}
+				ballSpeed={ballSpeed}
+				handlePlayerSpeedIncrease={handlePlayerSpeedIncrease}
+				handlePlayerSpeedDecrease={handlePlayerSpeedDecrease}
+				handleOpponentDifficultyIncrease={handleOpponentDifficultyIncrease}
+				handleOpponentDifficultyDecrease={handleOpponentDifficultyDecrease}
+				handleBallSpeedIncrease={handleBallSpeedIncrease}
+				handleBallSpeedDecrease={handleBallSpeedDecrease}
+			/>
 			<Board
-				height={height}
-				width={width}
+				height={boardHeight}
+				width={boardWidth}
 				paddleWidth={paddleWidth}
 				paddleHeight={paddleHeight}
 				ballSize={ballSize}

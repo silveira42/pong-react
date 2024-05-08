@@ -198,9 +198,17 @@ function Board(props) {
 				className='board'
 				style={{ width: props.width, height: props.height }}
 			>
-				<Paddle position={playerPosition} />
-				<Ball position={ballPosition} />
-				<Paddle position={opponentPosition} />
+				<Paddle
+					position={playerPosition}
+					width={props.paddleWidth}
+					height={props.paddleHeight}
+				/>
+				<Ball position={ballPosition} size={props.ballSize} />
+				<Paddle
+					position={opponentPosition}
+					width={props.paddleWidth}
+					height={props.paddleHeight}
+				/>
 				{props.isPaused ? (
 					<button
 						className='board-resume-button'
