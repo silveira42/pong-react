@@ -41,6 +41,7 @@ function Board() {
 	const [opponentPosition, setOpponentPosition] = React.useState(
 		initialOpponentPosition
 	);
+	const [lastServePlayer, setLastServePlayer] = React.useState(false);
 
 	// game loop function
 	const loop = function () {
@@ -89,8 +90,14 @@ function Board() {
 	}
 
 	function serve() {
+		const ballVelocityCpy = { ...ballVelocity };
+
+		ballVelocityCpy.x = lastServePlayer ? 1 : -1;
+		ballVelocityCpy.y = speed * Math.random();
+
 		setBallPosition(initialBallPosition);
-		setBallVelocity(initialBallVelocity);
+		setBallVelocity(ballVelocityCpy);
+		setLastServePlayer(!lastServePlayer);
 	}
 
 	function onBallMove() {
