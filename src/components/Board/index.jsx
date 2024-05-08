@@ -49,11 +49,10 @@ function Board() {
 		if (!isRunning) {
 			window.cancelAnimationFrame(loop);
 		}
-		window.requestAnimationFrame(loop);
 	};
 
 	useKeyPressEvent('p', () => {
-		setIsRunning(false);
+		setIsRunning(!isRunning);
 	});
 
 	function updateOpponent() {
@@ -147,22 +146,6 @@ function Board() {
 		updatePlayer();
 	}
 
-	if (!isRunning) {
-		return (
-			<div className='board-container' style={{ width: width, height: height }}>
-				<button
-					className='board-start-button'
-					onClick={() => {
-						setIsRunning(true);
-						serve();
-					}}
-				>
-					Start
-				</button>
-			</div>
-		);
-	}
-
 	if (isRunning) {
 		window.requestAnimationFrame(loop);
 	}
@@ -172,6 +155,16 @@ function Board() {
 			<Paddle position={playerPosition} />
 			<Ball position={ballPosition} />
 			<Paddle position={opponentPosition} />
+			{isRunning ? null : (
+				<button
+					className='board-resume-button'
+					onClick={() => {
+						setIsRunning(true);
+					}}
+				>
+					Resume
+				</button>
+			)}
 		</div>
 	);
 }
