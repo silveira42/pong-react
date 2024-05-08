@@ -2,7 +2,7 @@ import React from 'react';
 import './styles.css';
 import Ball from '../Ball';
 import Paddle from '../Paddle';
-import useKeyPress from './useKeyPress'; // Import the hook
+import useKeyPress from '../../util/useKeyPress'; // Import the hook
 import { useKeyPressEvent } from 'react-use';
 
 const height = parseFloat(visualViewport.height * 0.7);
@@ -58,6 +58,25 @@ function Board() {
 	);
 	const [lastServePlayer, setLastServePlayer] = React.useState(false);
 	const [score, setScore] = React.useState(initialScore);
+
+	React.useEffect(() => {
+		window.addEventListener(
+			'blur',
+			function (event) {
+				setIsPaused(true);
+			},
+			false
+		);
+		return () => {
+			window.removeEventListener(
+				'blur',
+				function (event) {
+					setIsPaused(true);
+				},
+				false
+			);
+		};
+	}, []);
 
 	// game loop function
 	const loop = function () {
