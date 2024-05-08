@@ -12,9 +12,10 @@ const paddleWidth = 20;
 const paddleHeight = 100;
 const ballSize = 20;
 const speed = 3;
+
 const initialBallPosition = { x: width / 2, y: height / 2 - ballSize / 2 };
 
-const initialBallDirection = { x: 1, y: 1 };
+const initialBallVelocity = { x: 1, y: 1 };
 
 const initialPlayerPosition = {
 	x: paddleWidth,
@@ -33,8 +34,7 @@ var AABBIntersect = function (ax, ay, aw, ah, bx, by, bw, bh) {
 function Board() {
 	const [isRunning, setIsRunning] = React.useState(false);
 	const [ballPosition, setBallPosition] = React.useState(initialBallPosition);
-	const [ballDirection, setBallDirection] =
-		React.useState(initialBallDirection);
+	const [ballVelocity, setBallVelocity] = React.useState(initialBallVelocity);
 	const [playerPosition, setPlayerPosition] = React.useState(
 		initialPlayerPosition
 	);
@@ -90,14 +90,16 @@ function Board() {
 
 	function serve() {
 		setBallPosition(initialBallPosition);
-		setBallDirection(initialBallDirection);
+		setBallVelocity(initialBallVelocity);
 	}
 
 	function onBallMove() {
-		let ballDirectionCpy = { ...ballDirection };
+		let ballVelocityCpy = { ...ballVelocity };
+		let ballPositionCpy = { ...ballPosition };
+
 		// if going to hit top or bottom, invert y direction
 		if (ballPosition.y > height - ballSize || ballPosition.y <= 0) {
-			ballDirectionCpy.y = ballDirection.y * -1;
+			ballVelocityCpy.y = ballVelocity.y * -1;
 		}
 
 		// if going to hit edge, serve and award point
@@ -129,15 +131,37 @@ function Board() {
 				paddleHeight
 			)
 		) {
-			ballDirectionCpy.x = ballDirection.x * -1;
+			const currentPaddle =
+				ballVelocity.x < 0 ? { ...playerPosition } : { ...opponentPosition };
+
+			const paddleName = ballVelocity.x < 0 ? 'player' : 'opponent';
+
+			ballPositionCpy.x =
+				paddleName === 'player'
+					? playerPosition.x + paddleWidth
+					: opponentPosition.x - ballSize;
+
+			const pi = Math.PI;
+
+			const n =
+				(ballPosition.y + ballSize - currentPaddle.y) /
+				(paddleHeight + ballSize);
+			const phi = 0.25 * pi * (2 * n - 1); // pi/4 = 45
+
+			// calculate smash value and update velocity
+			const smash = Math.abs(phi) > 0.2 * pi ? 1.5 : 1;
+
+			ballVelocityCpy.x =
+				smash * (paddleName === 'player' ? 1 : -1) * speed * Math.cos(phi);
+			ballVelocityCpy.y = smash * speed * Math.sin(phi);
 		}
 
 		setBallPosition({
-			x: ballPosition.x + speed * ballDirectionCpy.x,
-			y: ballPosition.y + speed * ballDirectionCpy.y,
+			x: ballPosition.x + speed * ballVelocityCpy.x,
+			y: ballPosition.y + speed * ballVelocityCpy.y,
 		});
 
-		setBallDirection(ballDirectionCpy);
+		setBallVelocity(ballVelocityCpy);
 	}
 
 	function updateBoard() {
