@@ -3,6 +3,7 @@ import './styles.css';
 import Ball from '../Ball';
 import Paddle from '../Paddle';
 import useKeyPress from './useKeyPress'; // Import the hook
+import { useKeyPressEvent } from 'react-use';
 
 const height = parseFloat(visualViewport.height * 0.7);
 const width = parseFloat(visualViewport.width * 0.7);
@@ -30,6 +31,7 @@ var AABBIntersect = function (ax, ay, aw, ah, bx, by, bw, bh) {
 };
 
 function Board() {
+	const [isRunning, setIsRunning] = React.useState(false);
 	const [ballPosition, setBallPosition] = React.useState(initialBallPosition);
 	const [ballDirection, setBallDirection] =
 		React.useState(initialBallDirection);
@@ -39,6 +41,21 @@ function Board() {
 	const [opponentPosition, setOpponentPosition] = React.useState(
 		initialOpponentPosition
 	);
+
+	// game loop function
+	const loop = function () {
+		updateBoard();
+
+		if (!isRunning) {
+			window.cancelAnimationFrame(loop);
+		}
+		window.requestAnimationFrame(loop);
+	};
+
+	useKeyPressEvent('p', () => {
+		console.log('p pressed');
+		setIsRunning(false);
+	});
 
 	function updateOpponent() {
 		// calculate ideal position
@@ -91,7 +108,7 @@ function Board() {
 			return;
 		}
 
-		// if going to hit player paddle, invert x direction
+		// if going to hit paddle, invert x direction
 		if (
 			AABBIntersect(
 				ballPosition.x,
@@ -102,13 +119,7 @@ function Board() {
 				playerPosition.y,
 				paddleWidth,
 				paddleHeight
-			)
-		) {
-			ballDirectionCpy.x = ballDirection.x * -1;
-		}
-
-		// if going to hit opponent paddle, invert x direction
-		if (
+			) ||
 			AABBIntersect(
 				ballPosition.x,
 				ballPosition.y,
@@ -137,13 +148,25 @@ function Board() {
 		updatePlayer();
 	}
 
-	// game loop function
-	var loop = function () {
-		updateBoard();
+	if (!isRunning) {
+		return (
+			<div className='board-container' style={{ width: width, height: height }}>
+				<button
+					className='board-start-button'
+					onClick={() => {
+						setIsRunning(true);
+						serve();
+					}}
+				>
+					Start
+				</button>
+			</div>
+		);
+	}
 
+	if (isRunning) {
 		window.requestAnimationFrame(loop);
-	};
-	window.requestAnimationFrame(loop);
+	}
 
 	return (
 		<div className='board-container' style={{ width: width, height: height }}>
