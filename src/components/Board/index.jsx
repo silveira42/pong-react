@@ -2,6 +2,7 @@ import React from 'react';
 import './styles.css';
 import Ball from '../Ball';
 import Paddle from '../Paddle';
+import useKeyPress from './useKeyPress'; // Import the hook
 
 const height = parseFloat(visualViewport.height * 0.7);
 const width = parseFloat(visualViewport.width * 0.7);
@@ -55,6 +56,23 @@ function Board() {
 		});
 	}
 
+	const arrowUpPressed = useKeyPress('ArrowUp');
+	const arrowDownPressed = useKeyPress('ArrowDown');
+
+	function updatePlayer() {
+		let playerY = playerPosition.y;
+
+		if (arrowUpPressed) playerY -= 7;
+		if (arrowDownPressed) playerY += 7;
+		// keep the paddle inside of the canvas
+		playerY = Math.max(Math.min(playerY, height - paddleHeight), 0);
+
+		setPlayerPosition({
+			...playerPosition,
+			y: playerY,
+		});
+	}
+
 	function serve() {
 		setBallPosition(initialBallPosition);
 		setBallDirection(initialBallDirection);
@@ -70,6 +88,7 @@ function Board() {
 		// if going to hit edge, serve and award point
 		if (ballPosition.x > width - ballSize || ballPosition.x <= 0) {
 			serve();
+			return;
 		}
 
 		// if going to hit player paddle, invert x direction
@@ -115,6 +134,7 @@ function Board() {
 	function updateBoard() {
 		onBallMove();
 		updateOpponent();
+		updatePlayer();
 	}
 
 	// game loop function
