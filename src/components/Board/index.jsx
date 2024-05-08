@@ -27,12 +27,17 @@ const initialOpponentPosition = {
 	y: height / 2 - paddleHeight / 2,
 };
 
+const initialScore = {
+	player: 0,
+	opponent: 0,
+};
+
 var AABBIntersect = function (ax, ay, aw, ah, bx, by, bw, bh) {
 	return ax < bx + bw && ay < by + bh && bx < ax + aw && by < ay + ah;
 };
 
 function Board() {
-	const [isRunning, setIsRunning] = React.useState(false);
+	const [isPaused, setIsPaused] = React.useState(false);
 	const [ballPosition, setBallPosition] = React.useState(initialBallPosition);
 	const [ballVelocity, setBallVelocity] = React.useState(initialBallVelocity);
 	const [playerPosition, setPlayerPosition] = React.useState(
@@ -42,18 +47,19 @@ function Board() {
 		initialOpponentPosition
 	);
 	const [lastServePlayer, setLastServePlayer] = React.useState(false);
+	const [score, setScore] = React.useState(initialScore);
 
 	// game loop function
 	const loop = function () {
 		updateBoard();
 
-		if (!isRunning) {
+		if (isPaused) {
 			window.cancelAnimationFrame(loop);
 		}
 	};
 
 	useKeyPressEvent('p', () => {
-		setIsRunning(!isRunning);
+		setIsPaused(!isPaused);
 	});
 
 	function updateOpponent() {
@@ -112,6 +118,11 @@ function Board() {
 		// if going to hit edge, serve and award point
 		if (ballPosition.x > width - ballSize || ballPosition.x <= 0) {
 			serve();
+			const newScore = { ...score };
+			ballPosition.x > width - ballSize
+				? newScore.player++
+				: newScore.opponent++;
+			setScore(newScore);
 			return;
 		}
 
@@ -177,25 +188,32 @@ function Board() {
 		updatePlayer();
 	}
 
-	if (isRunning) {
+	if (!isPaused) {
 		window.requestAnimationFrame(loop);
 	}
 
 	return (
-		<div className='board-container' style={{ width: width, height: height }}>
-			<Paddle position={playerPosition} />
-			<Ball position={ballPosition} />
-			<Paddle position={opponentPosition} />
-			{isRunning ? null : (
-				<button
-					className='board-resume-button'
-					onClick={() => {
-						setIsRunning(true);
-					}}
-				>
-					Resume
-				</button>
-			)}
+		<div className='board-container'>
+			<div className='score'>
+				<h2>
+					{score.player} - {score.opponent}
+				</h2>
+			</div>
+			<div className='board' style={{ width: width, height: height }}>
+				<Paddle position={playerPosition} />
+				<Ball position={ballPosition} />
+				<Paddle position={opponentPosition} />
+				{isPaused ? (
+					<button
+						className='board-resume-button'
+						onClick={() => {
+							setIsPaused(true);
+						}}
+					>
+						Resume
+					</button>
+				) : null}
+			</div>
 		</div>
 	);
 }

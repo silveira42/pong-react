@@ -1,4 +1,18 @@
 .board-container {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+	height: 100vh;
+	background-color: #fff;
+}
+
+.score {
+	margin: 20px;
+	color: #000
+}
+
+.board {
 	position: relative;
 	margin: 20px;
 	background-color: #000;
