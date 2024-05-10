@@ -167,7 +167,8 @@ function Board(props) {
 			const currentPaddle =
 				ballVelocity.x < 0 ? { ...playerPosition } : { ...opponentPosition };
 
-			const paddleName = ballVelocity.x < 0 ? 'player' : 'opponent';
+			const paddleName =
+				ballPosition.x < props.width / 2 ? 'player' : 'opponent';
 
 			ballPositionCpy.x =
 				paddleName === 'player'
@@ -176,10 +177,15 @@ function Board(props) {
 
 			const pi = Math.PI;
 
-			const n =
+			const hitLocation =
 				(ballPosition.y + props.ballSize - currentPaddle.y) /
 				(props.paddleHeight + props.ballSize);
-			const phi = 0.25 * pi * (2 * n - 1); // pi/4 = 45
+
+			const normalizedHitLocation = hitLocation * 2 - 1;
+			// Getting the hit location and normalizing it to be between -1 and 1
+
+			const phi = 0.25 * pi * normalizedHitLocation; // pi/4 = 45
+			// Angle in radians
 
 			// calculate smash value and update velocity
 			const smash = Math.abs(phi) > 0.2 * pi ? 1.5 : 1;
