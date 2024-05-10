@@ -10,6 +10,10 @@
 	position: relative;
 	margin: 20px;
 	background-color: #000;
+	background-image: linear-gradient(rgb(255, 255, 255) 33%, rgba(0, 0, 0, 0) 0%);
+	background-position: center;
+	background-size: 3px 20px;
+	background-repeat: repeat-y;
 }
 
 .board-resume-button {
@@ -23,4 +27,9 @@
 	padding: 10px 20px;
 	font-size: 20px;
 	cursor: pointer;
+}
+
+hr {
+  border: none;
+  border-top: 1px dotted black;
 }

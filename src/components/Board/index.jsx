@@ -30,11 +30,16 @@ function Board(props) {
 		}
 	};
 
+	const arrowUpPressed = useKeyPress('ArrowUp');
+	const wPressed = useKeyPress('w');
+	const arrowDownPressed = useKeyPress('ArrowDown');
+	const sPressed = useKeyPress('s');
+
 	useKeyPressEvent('p', () => {
 		props.handleChangePause(!props.isPaused);
 	});
 
-	function updateOpponent() {
+	function updateMachineOpponent() {
 		// calculate ideal position
 		const destination =
 			ballPosition.y - (props.paddleHeight - props.ballSize) * 0.5;
@@ -71,14 +76,27 @@ function Board(props) {
 		});
 	}
 
-	const arrowUpPressed = useKeyPress('ArrowUp');
-	const arrowDownPressed = useKeyPress('ArrowDown');
+	function updatePlayerOpponent() {
+		let playerY = opponentPosition.y;
+
+		if (wPressed) playerY -= props.playerSpeed;
+		if (sPressed) playerY += props.playerSpeed;
+
+		// keep the paddle inside of the canvas
+		playerY = Math.max(Math.min(playerY, props.height - props.paddleHeight), 0);
+
+		setOpponentPosition({
+			...opponentPosition,
+			y: playerY,
+		});
+	}
 
 	function updatePlayer() {
 		let playerY = playerPosition.y;
 
 		if (arrowUpPressed) playerY -= props.playerSpeed;
 		if (arrowDownPressed) playerY += props.playerSpeed;
+
 		// keep the paddle inside of the canvas
 		playerY = Math.max(Math.min(playerY, props.height - props.paddleHeight), 0);
 
@@ -184,8 +202,10 @@ function Board(props) {
 
 	function updateBoard() {
 		onBallMove();
-		updateOpponent();
 		updatePlayer();
+		props.opponentMode === 'player'
+			? updatePlayerOpponent()
+			: updateMachineOpponent();
 	}
 
 	if (!props.isPaused) {
@@ -194,6 +214,7 @@ function Board(props) {
 
 	return (
 		<div className='board-container'>
+			<hr />
 			<div
 				className='board'
 				style={{ width: props.width, height: props.height }}

@@ -6,6 +6,9 @@ import GameHeader from '../GameHeader';
 const boardHeight = parseFloat(visualViewport.height * 0.6);
 const boardWidth = parseFloat(visualViewport.width * 0.6);
 
+const headerHeight = parseFloat(visualViewport.height * 0.25);
+const headerWidth = parseFloat(visualViewport.width * 0.6);
+
 const paddleHeight = 100;
 const paddleWidth = 20;
 const ballSize = 20;
@@ -31,6 +34,7 @@ const initialBallSpeed = 4;
 const playerSpeedStep = 1;
 const opponentDifficultyStep = 1;
 const ballSpeedStep = 0.5;
+const initialOpponentMode = 'machine';
 
 const initialScore = {
 	player: 0,
@@ -42,6 +46,7 @@ function Game() {
 	const [isPaused, setIsPaused] = React.useState(false);
 	const [ballSpeed, setBallSpeed] = React.useState(initialBallSpeed);
 	const [playerSpeed, setPlayerSpeed] = React.useState(initialPlayerSpeed);
+	const [opponentMode, setOpponentMode] = React.useState(initialOpponentMode);
 	const [opponentDifficulty, setOpponentDifficulty] = React.useState(
 		initialOpponentDifficulty
 	);
@@ -109,6 +114,10 @@ function Game() {
 		setBallSpeed(ballSpeed <= 1 ? ballSpeed : ballSpeed - ballSpeedStep);
 	}
 
+	function handleToggleOpponentMode() {
+		setOpponentMode(opponentMode === 'machine' ? 'player' : 'machine');
+	}
+
 	return (
 		<div className='game-container'>
 			<GameHeader
@@ -116,12 +125,16 @@ function Game() {
 				playerSpeed={playerSpeed}
 				opponentDifficulty={opponentDifficulty}
 				ballSpeed={ballSpeed}
+				opponentMode={opponentMode}
+				height={headerHeight}
+				width={headerWidth}
 				handlePlayerSpeedIncrease={handlePlayerSpeedIncrease}
 				handlePlayerSpeedDecrease={handlePlayerSpeedDecrease}
 				handleOpponentDifficultyIncrease={handleOpponentDifficultyIncrease}
 				handleOpponentDifficultyDecrease={handleOpponentDifficultyDecrease}
 				handleBallSpeedIncrease={handleBallSpeedIncrease}
 				handleBallSpeedDecrease={handleBallSpeedDecrease}
+				handleToggleOpponentMode={handleToggleOpponentMode}
 			/>
 			<Board
 				height={boardHeight}
@@ -138,6 +151,7 @@ function Game() {
 				ballSpeed={ballSpeed}
 				playerSpeed={playerSpeed}
 				opponentDifficulty={opponentDifficulty}
+				opponentMode={opponentMode}
 				handleChangePause={handleChangePause}
 				handleScoreChange={handleScoreChange}
 			/>

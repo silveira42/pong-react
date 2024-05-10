@@ -3,36 +3,74 @@ import './styles.css';
 
 export default function GameHeader(props) {
 	return (
-		<div className='game-header-container'>
+		<div
+			className='game-header-container'
+			style={{ height: props.height, width: props.width }}
+		>
 			<div className='score-container'>
 				<h2 className='score'>
 					{props.score.player} - {props.score.opponent}
 				</h2>
+				<h2>Opponent Mode</h2>
+				<button
+					className='game-header-button'
+					onClick={() => props.handleToggleOpponentMode()}
+				>
+					{props.opponentMode}
+				</button>
 			</div>
 			<div className='player-paddle-speed'>
 				<h2>Player Speed: {props.playerSpeed}</h2>
-				<button onClick={() => props.handlePlayerSpeedIncrease()}>
+				<button
+					className='game-header-button'
+					onClick={() => props.handlePlayerSpeedIncrease()}
+				>
 					Increase player speed
 				</button>
-				<button onClick={() => props.handlePlayerSpeedDecrease()}>
+				<button
+					className='game-header-button'
+					onClick={() => props.handlePlayerSpeedDecrease()}
+				>
 					Decrease player speed
 				</button>
 			</div>
 			<div className='opponent-difficulty'>
 				<h2>Opponent Difficulty: {props.opponentDifficulty}</h2>
-				<button onClick={() => props.handleOpponentDifficultyIncrease()}>
+				<button
+					className={
+						props.opponentMode === 'machine'
+							? 'game-header-button'
+							: 'game-header-button-disabled'
+					}
+					disabled={props.opponentMode === 'machine' ? false : true}
+					onClick={() => props.handleOpponentDifficultyIncrease()}
+				>
 					Increase difficulty
 				</button>
-				<button onClick={() => props.handleOpponentDifficultyDecrease()}>
+				<button
+					className={
+						props.opponentMode === 'machine'
+							? 'game-header-button'
+							: 'game-header-button-disabled'
+					}
+					disabled={props.opponentMode === 'machine' ? false : true}
+					onClick={() => props.handleOpponentDifficultyDecrease()}
+				>
 					Decrease difficulty
 				</button>
 			</div>
 			<div className='ball-speed'>
 				<h2>Ball Speed: {props.ballSpeed}</h2>
-				<button onClick={() => props.handleBallSpeedIncrease()}>
+				<button
+					className='game-header-button'
+					onClick={() => props.handleBallSpeedIncrease()}
+				>
 					Increase Speed
 				</button>
-				<button onClick={() => props.handleBallSpeedDecrease()}>
+				<button
+					className='game-header-button'
+					onClick={() => props.handleBallSpeedDecrease()}
+				>
 					Decrease Speed
 				</button>
 			</div>
