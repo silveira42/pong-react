@@ -30,8 +30,8 @@ const gameSettings: GameSettingsType = {
 	opponentDifficulty: 2,
 	opponentDifficultyStep: 1,
 	opponentMode: 'machine',
-	paddleWidth: 20,
-	paddleHeight: 100,
+	paddleShortSide: 20,
+	paddleLongSide: 100,
 	ballSize: 20,
 };
 
@@ -41,12 +41,12 @@ const initialBallPosition = {
 };
 const initialBallVelocity = { longAxis: 1, shortAxis: 1 };
 const initialPlayerPosition = {
-	longAxis: gameSettings.paddleWidth * 2,
-	shortAxis: gameSettings.boardShortAxis / 2 - gameSettings.paddleHeight / 2,
+	longAxis: gameSettings.paddleShortSide * 2,
+	shortAxis: gameSettings.boardShortAxis / 2 - gameSettings.paddleLongSide / 2,
 };
 const initialOpponentPosition = {
-	longAxis: gameSettings.boardLongAxis - gameSettings.paddleWidth * 3,
-	shortAxis: gameSettings.boardShortAxis / 2 - gameSettings.paddleHeight / 2,
+	longAxis: gameSettings.boardLongAxis - gameSettings.paddleShortSide * 3,
+	shortAxis: gameSettings.boardShortAxis / 2 - gameSettings.paddleLongSide / 2,
 };
 
 const initialScore = {
@@ -55,6 +55,7 @@ const initialScore = {
 };
 
 function Game() {
+	// Game settings state
 	const [boardShortAxis, setBoardShortAxis] = React.useState(
 		gameSettings.boardShortAxis
 	);
@@ -68,14 +69,12 @@ function Game() {
 		gameSettings.headerLongAxis
 	);
 	const [paddleWidth, setPaddleWidth] = React.useState(
-		gameSettings.paddleWidth
+		gameSettings.paddleShortSide
 	);
 	const [paddleHeight, setPaddleHeight] = React.useState(
-		gameSettings.paddleHeight
+		gameSettings.paddleLongSide
 	);
 	const [ballSize, setBallSize] = React.useState(gameSettings.ballSize);
-	const [score, setScore] = React.useState(initialScore);
-	const [isPaused, setIsPaused] = React.useState(true);
 	const [ballSpeed, setBallSpeed] = React.useState(gameSettings.ballSpeed);
 	const [playerSpeed, setPlayerSpeed] = React.useState(
 		gameSettings.playerSpeed
@@ -87,23 +86,9 @@ function Game() {
 		gameSettings.opponentDifficulty
 	);
 
-	function handleChangePause(newState: boolean) {
-		setIsPaused(newState);
-	}
-
-	function handleScoreChange(newScore: { player: number; opponent: number }) {
-		setScore(newScore);
-	}
-
-	function handlePageSizeChange() {
-		setBoardShortAxis(visualViewport ? visualViewport.height * 0.6 : 700);
-		setBoardLongAxis(visualViewport ? visualViewport.width * 0.6 : 600);
-		setHeaderHeight(visualViewport ? visualViewport.height * 0.25 : 300);
-		setHeaderWidth(visualViewport ? visualViewport.width * 0.6 : 600);
-		setPaddleWidth(20);
-		setPaddleHeight(100);
-		setBallSize(20);
-	}
+	// Game data state
+	const [score, setScore] = React.useState(initialScore);
+	const [isPaused, setIsPaused] = React.useState(true);
 
 	React.useEffect(() => {
 		window.addEventListener('resize', handlePageSizeChange);
@@ -130,6 +115,26 @@ function Game() {
 			);
 		};
 	}, []);
+
+	function handleChangePause(newState: boolean) {
+		setIsPaused(newState);
+	}
+
+	function handleScoreChange(newScore: { player: number; opponent: number }) {
+		setScore(newScore);
+	}
+
+	function handlePageSizeChange() {
+		if (!visualViewport) return;
+
+		setBoardShortAxis(visualViewport.height);
+		setBoardLongAxis(visualViewport.width);
+		setHeaderHeight(visualViewport.height);
+		setHeaderWidth(visualViewport.width);
+		setPaddleWidth(20);
+		setPaddleHeight(100);
+		setBallSize(20);
+	}
 
 	function handlePlayerSpeedIncrease() {
 		setPlayerSpeed(

@@ -10,7 +10,7 @@ export type GameSettingsType = {
 	opponentDifficulty: number;
 	opponentDifficultyStep: number;
 	opponentMode: string;
-	paddleWidth: number;
-	paddleHeight: number;
+	paddleShortSide: number;
+	paddleLongSide: number;
 	ballSize: number;
 };
