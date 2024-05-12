@@ -1,7 +1,8 @@
 import React from 'react';
 import './styles.css';
+import { HeaderProps } from './HeaderProps';
 
-export default function GameHeader(props) {
+export default function Header(props: HeaderProps) {
 	return (
 		<div
 			className='game-header-container'

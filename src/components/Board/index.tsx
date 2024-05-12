@@ -5,8 +5,9 @@ import Paddle from '../Paddle';
 import useKeyPress from '../../util/useKeyPress'; // Import the hook
 import { useKeyPressEvent } from 'react-use';
 import AABBIntersect from '../../util/aabbIntersect';
+import { BoardProps } from './BoardProps';
 
-function Board(props) {
+function Board(props: BoardProps) {
 	const [ballPosition, setBallPosition] = React.useState(
 		props.initialBallPosition
 	);
@@ -26,7 +27,7 @@ function Board(props) {
 		updateBoard();
 
 		if (props.isPaused) {
-			window.cancelAnimationFrame(loop);
+			window.cancelAnimationFrame(0);
 		}
 	};
 
