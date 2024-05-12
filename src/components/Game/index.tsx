@@ -4,11 +4,25 @@ import './styles.css';
 import Header from '../Header';
 import { GameSettingsType } from './GameSettingsType';
 
+if (!visualViewport) throw new Error('visualViewport is not supported');
+
 const gameSettings: GameSettingsType = {
-	boardHeight: visualViewport ? visualViewport.height * 0.6 : 700,
-	boardWidth: visualViewport ? visualViewport.width * 0.6 : 600,
-	headerHeight: visualViewport ? visualViewport.height * 0.25 : 300,
-	headerWidth: visualViewport ? visualViewport.width * 0.6 : 600,
+	boardShortAxis:
+		visualViewport.height > visualViewport.width
+			? visualViewport.width * 0.6
+			: visualViewport.height * 0.6,
+	boardLongAxis:
+		visualViewport.height > visualViewport.width
+			? visualViewport.height * 0.6
+			: visualViewport.width * 0.6,
+	headerShortAxis:
+		visualViewport.height > visualViewport.width
+			? visualViewport.width * 0.25
+			: visualViewport.height * 0.25,
+	headerLongAxis:
+		visualViewport.height > visualViewport.width
+			? visualViewport.height * 0.6
+			: visualViewport.width * 0.6,
 	playerSpeed: 10,
 	playerSpeedStep: 1,
 	ballSpeed: 4,
@@ -22,17 +36,17 @@ const gameSettings: GameSettingsType = {
 };
 
 const initialBallPosition = {
-	x: gameSettings.boardWidth / 2,
-	y: gameSettings.boardHeight / 2 - gameSettings.ballSize / 2,
+	longAxis: gameSettings.boardLongAxis / 2,
+	shortAxis: gameSettings.boardShortAxis / 2 - gameSettings.ballSize / 2,
 };
-const initialBallVelocity = { x: 1, y: 1 };
+const initialBallVelocity = { longAxis: 1, shortAxis: 1 };
 const initialPlayerPosition = {
-	x: gameSettings.paddleWidth * 2,
-	y: gameSettings.boardHeight / 2 - gameSettings.paddleHeight / 2,
+	longAxis: gameSettings.paddleWidth * 2,
+	shortAxis: gameSettings.boardShortAxis / 2 - gameSettings.paddleHeight / 2,
 };
 const initialOpponentPosition = {
-	x: gameSettings.boardWidth - gameSettings.paddleWidth * 3,
-	y: gameSettings.boardHeight / 2 - gameSettings.paddleHeight / 2,
+	longAxis: gameSettings.boardLongAxis - gameSettings.paddleWidth * 3,
+	shortAxis: gameSettings.boardShortAxis / 2 - gameSettings.paddleHeight / 2,
 };
 
 const initialScore = {
@@ -41,15 +55,17 @@ const initialScore = {
 };
 
 function Game() {
-	const [boardHeight, setBoardHeight] = React.useState(
-		gameSettings.boardHeight
+	const [boardShortAxis, setBoardShortAxis] = React.useState(
+		gameSettings.boardShortAxis
 	);
-	const [boardWidth, setBoardWidth] = React.useState(gameSettings.boardWidth);
+	const [boardLongAxis, setBoardLongAxis] = React.useState(
+		gameSettings.boardLongAxis
+	);
 	const [headerHeight, setHeaderHeight] = React.useState(
-		gameSettings.headerHeight
+		gameSettings.headerShortAxis
 	);
 	const [headerWidth, setHeaderWidth] = React.useState(
-		gameSettings.headerWidth
+		gameSettings.headerLongAxis
 	);
 	const [paddleWidth, setPaddleWidth] = React.useState(
 		gameSettings.paddleWidth
@@ -59,7 +75,7 @@ function Game() {
 	);
 	const [ballSize, setBallSize] = React.useState(gameSettings.ballSize);
 	const [score, setScore] = React.useState(initialScore);
-	const [isPaused, setIsPaused] = React.useState(false);
+	const [isPaused, setIsPaused] = React.useState(true);
 	const [ballSpeed, setBallSpeed] = React.useState(gameSettings.ballSpeed);
 	const [playerSpeed, setPlayerSpeed] = React.useState(
 		gameSettings.playerSpeed
@@ -79,22 +95,22 @@ function Game() {
 		setScore(newScore);
 	}
 
-	// function handlePageSizeChange() {
-	// 	setBoardHeight(visualViewport ? visualViewport.height * 0.6 : 700);
-	// 	setBoardWidth(visualViewport ? visualViewport.width * 0.6 : 600);
-	// 	setHeaderHeight(visualViewport ? visualViewport.height * 0.25 : 300);
-	// 	setHeaderWidth(visualViewport ? visualViewport.width * 0.6 : 600);
-	// 	setPaddleWidth(20);
-	// 	setPaddleHeight(100);
-	// 	setBallSize(20);
-	// }
+	function handlePageSizeChange() {
+		setBoardShortAxis(visualViewport ? visualViewport.height * 0.6 : 700);
+		setBoardLongAxis(visualViewport ? visualViewport.width * 0.6 : 600);
+		setHeaderHeight(visualViewport ? visualViewport.height * 0.25 : 300);
+		setHeaderWidth(visualViewport ? visualViewport.width * 0.6 : 600);
+		setPaddleWidth(20);
+		setPaddleHeight(100);
+		setBallSize(20);
+	}
 
-	// React.useEffect(() => {
-	// 	window.addEventListener('resize', handlePageSizeChange);
-	// 	return () => {
-	// 		window.removeEventListener('resize', handlePageSizeChange);
-	// 	};
-	// }, []);
+	React.useEffect(() => {
+		window.addEventListener('resize', handlePageSizeChange);
+		return () => {
+			window.removeEventListener('resize', handlePageSizeChange);
+		};
+	}, []);
 
 	React.useEffect(() => {
 		window.addEventListener(
@@ -182,10 +198,10 @@ function Game() {
 				handleToggleOpponentMode={handleToggleOpponentMode}
 			/>
 			<Board
-				height={boardHeight}
-				width={boardWidth}
-				paddleWidth={paddleWidth}
-				paddleHeight={paddleHeight}
+				shortAxis={boardShortAxis}
+				longAxis={boardLongAxis}
+				paddleShortSide={paddleWidth}
+				paddleLongSide={paddleHeight}
 				ballSize={ballSize}
 				initialBallPosition={initialBallPosition}
 				initialBallVelocity={initialBallVelocity}

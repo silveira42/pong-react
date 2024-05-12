@@ -43,9 +43,9 @@ function Board(props: BoardProps) {
 	function updateMachineOpponent() {
 		// calculate ideal position
 		const destination =
-			ballPosition.y - (props.paddleHeight - props.ballSize) * 0.5;
+			ballPosition.shortAxis - (props.paddleLongSide - props.ballSize) * 0.5;
 
-		let opponentY = opponentPosition.y;
+		let opponentY = opponentPosition.shortAxis;
 
 		// ease the movement towards the ideal position
 		let opponentSpeed = 0;
@@ -67,51 +67,57 @@ function Board(props: BoardProps) {
 
 		// keep the paddle inside of the canvas
 		opponentY = Math.max(
-			Math.min(opponentY, props.height - props.paddleHeight),
+			Math.min(opponentY, props.shortAxis - props.paddleLongSide),
 			0
 		);
 
 		setOpponentPosition({
 			...opponentPosition,
-			y: opponentY,
+			shortAxis: opponentY,
 		});
 	}
 
 	function updatePlayerOpponent() {
-		let playerY = opponentPosition.y;
+		let playerY = opponentPosition.shortAxis;
 
 		if (wPressed) playerY -= props.playerSpeed;
 		if (sPressed) playerY += props.playerSpeed;
 
 		// keep the paddle inside of the canvas
-		playerY = Math.max(Math.min(playerY, props.height - props.paddleHeight), 0);
+		playerY = Math.max(
+			Math.min(playerY, props.shortAxis - props.paddleLongSide),
+			0
+		);
 
 		setOpponentPosition({
 			...opponentPosition,
-			y: playerY,
+			shortAxis: playerY,
 		});
 	}
 
 	function updatePlayer() {
-		let playerY = playerPosition.y;
+		let playerY = playerPosition.shortAxis;
 
 		if (arrowUpPressed) playerY -= props.playerSpeed;
 		if (arrowDownPressed) playerY += props.playerSpeed;
 
 		// keep the paddle inside of the canvas
-		playerY = Math.max(Math.min(playerY, props.height - props.paddleHeight), 0);
+		playerY = Math.max(
+			Math.min(playerY, props.shortAxis - props.paddleLongSide),
+			0
+		);
 
 		setPlayerPosition({
 			...playerPosition,
-			y: playerY,
+			shortAxis: playerY,
 		});
 	}
 
 	function serve() {
 		const ballVelocityCpy = { ...ballVelocity };
 
-		ballVelocityCpy.x = lastServePlayer ? 1 : -1;
-		ballVelocityCpy.y = props.ballSpeed * Math.random();
+		ballVelocityCpy.longAxis = lastServePlayer ? 1 : -1;
+		ballVelocityCpy.shortAxis = props.ballSpeed * Math.random();
 
 		setBallPosition(props.initialBallPosition);
 		setBallVelocity(ballVelocityCpy);
@@ -123,19 +129,22 @@ function Board(props: BoardProps) {
 		let ballPositionCpy = { ...ballPosition };
 
 		// if going to hit top invert y direction
-		if (ballPosition.y >= props.height - props.ballSize) {
-			ballVelocityCpy.y = -Math.abs(ballVelocity.y);
+		if (ballPosition.shortAxis >= props.shortAxis - props.ballSize) {
+			ballVelocityCpy.shortAxis = -Math.abs(ballVelocity.shortAxis);
 		}
 		// if going to hit bottom, invert y direction
-		if (ballPosition.y <= 0) {
-			ballVelocityCpy.y = Math.abs(ballVelocity.y);
+		if (ballPosition.shortAxis <= 0) {
+			ballVelocityCpy.shortAxis = Math.abs(ballVelocity.shortAxis);
 		}
 
 		// if going to hit edge, serve and award point
-		if (ballPosition.x > props.width - props.ballSize || ballPosition.x <= 0) {
+		if (
+			ballPosition.longAxis > props.longAxis - props.ballSize ||
+			ballPosition.longAxis <= 0
+		) {
 			serve();
 			const newScore = { ...props.score };
-			ballPosition.x > props.width - props.ballSize
+			ballPosition.longAxis > props.longAxis - props.ballSize
 				? newScore.player++
 				: newScore.opponent++;
 			props.handleScoreChange(newScore);
@@ -145,42 +154,44 @@ function Board(props: BoardProps) {
 		// if going to hit paddle, invert x direction
 		if (
 			AABBIntersect(
-				ballPosition.x,
-				ballPosition.y,
+				ballPosition.longAxis,
+				ballPosition.shortAxis,
 				props.ballSize,
 				props.ballSize,
-				playerPosition.x,
-				playerPosition.y,
-				props.paddleWidth,
-				props.paddleHeight
+				playerPosition.longAxis,
+				playerPosition.shortAxis,
+				props.paddleShortSide,
+				props.paddleLongSide
 			) ||
 			AABBIntersect(
-				ballPosition.x,
-				ballPosition.y,
+				ballPosition.longAxis,
+				ballPosition.shortAxis,
 				props.ballSize,
 				props.ballSize,
-				opponentPosition.x,
-				opponentPosition.y,
-				props.paddleWidth,
-				props.paddleHeight
+				opponentPosition.longAxis,
+				opponentPosition.shortAxis,
+				props.paddleShortSide,
+				props.paddleLongSide
 			)
 		) {
 			const currentPaddle =
-				ballVelocity.x < 0 ? { ...playerPosition } : { ...opponentPosition };
+				ballVelocity.longAxis < 0
+					? { ...playerPosition }
+					: { ...opponentPosition };
 
 			const paddleName =
-				ballPosition.x < props.width / 2 ? 'player' : 'opponent';
+				ballPosition.longAxis < props.longAxis / 2 ? 'player' : 'opponent';
 
-			ballPositionCpy.x =
+			ballPositionCpy.longAxis =
 				paddleName === 'player'
-					? playerPosition.x + props.paddleWidth
-					: opponentPosition.x - props.ballSize;
+					? playerPosition.longAxis + props.paddleShortSide
+					: opponentPosition.longAxis - props.ballSize;
 
 			const pi = Math.PI;
 
 			const hitLocation =
-				(ballPosition.y + props.ballSize - currentPaddle.y) /
-				(props.paddleHeight + props.ballSize);
+				(ballPosition.shortAxis + props.ballSize - currentPaddle.shortAxis) /
+				(props.paddleLongSide + props.ballSize);
 
 			const normalizedHitLocation = hitLocation * 2 - 1;
 			// Getting the hit location and normalizing it to be between -1 and 1
@@ -191,17 +202,19 @@ function Board(props: BoardProps) {
 			// calculate smash value and update velocity
 			const smash = Math.abs(phi) > 0.2 * pi ? 1.5 : 1;
 
-			ballVelocityCpy.x =
+			ballVelocityCpy.longAxis =
 				smash *
 				(paddleName === 'player' ? 1 : -1) *
 				props.ballSpeed *
 				Math.cos(phi);
-			ballVelocityCpy.y = smash * props.ballSpeed * Math.sin(phi);
+			ballVelocityCpy.shortAxis = smash * props.ballSpeed * Math.sin(phi);
 		}
 
 		setBallPosition({
-			x: ballPositionCpy.x + props.ballSpeed * ballVelocityCpy.x,
-			y: ballPositionCpy.y + props.ballSpeed * ballVelocityCpy.y,
+			longAxis:
+				ballPositionCpy.longAxis + props.ballSpeed * ballVelocityCpy.longAxis,
+			shortAxis:
+				ballPositionCpy.shortAxis + props.ballSpeed * ballVelocityCpy.shortAxis,
 		});
 
 		setBallVelocity(ballVelocityCpy);
@@ -224,18 +237,18 @@ function Board(props: BoardProps) {
 			<hr />
 			<div
 				className='board'
-				style={{ width: props.width, height: props.height }}
+				style={{ width: props.longAxis, height: props.shortAxis }}
 			>
 				<Paddle
 					position={playerPosition}
-					width={props.paddleWidth}
-					height={props.paddleHeight}
+					width={props.paddleShortSide}
+					height={props.paddleLongSide}
 				/>
 				<Ball position={ballPosition} size={props.ballSize} />
 				<Paddle
 					position={opponentPosition}
-					width={props.paddleWidth}
-					height={props.paddleHeight}
+					width={props.paddleShortSide}
+					height={props.paddleLongSide}
 				/>
 				{props.isPaused ? (
 					<button

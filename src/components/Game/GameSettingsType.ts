@@ -1,8 +1,8 @@
 export type GameSettingsType = {
-	boardHeight: number;
-	boardWidth: number;
-	headerHeight: number;
-	headerWidth: number;
+	boardShortAxis: number;
+	boardLongAxis: number;
+	headerShortAxis: number;
+	headerLongAxis: number;
 	playerSpeed: number;
 	playerSpeedStep: number;
 	ballSpeed: number;

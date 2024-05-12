@@ -1,15 +1,15 @@
 import { ScoreType } from 'components/Game/ScoreType';
 
 export type BoardProps = {
-	height: number;
-	width: number;
-	paddleWidth: number;
-	paddleHeight: number;
+	shortAxis: number;
+	longAxis: number;
+	paddleShortSide: number;
+	paddleLongSide: number;
 	ballSize: number;
-	initialBallPosition: { x: number; y: number };
-	initialBallVelocity: { x: number; y: number };
-	initialPlayerPosition: { x: number; y: number };
-	initialOpponentPosition: { x: number; y: number };
+	initialBallPosition: { longAxis: number; shortAxis: number };
+	initialBallVelocity: { longAxis: number; shortAxis: number };
+	initialPlayerPosition: { longAxis: number; shortAxis: number };
+	initialOpponentPosition: { longAxis: number; shortAxis: number };
 	score: { player: number; opponent: number };
 	isPaused: boolean;
 	ballSpeed: number;
