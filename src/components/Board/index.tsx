@@ -71,8 +71,14 @@ function Board(props: BoardProps) {
 			0
 		);
 
+		if (!visualViewport) return;
+
 		setOpponentPosition({
 			...opponentPosition,
+			longAxis:
+				visualViewport.height > visualViewport.width
+					? visualViewport.height * 0.6
+					: visualViewport.width * 0.6 - props.paddleShortSide * 3,
 			shortAxis: opponentY,
 		});
 	}
@@ -91,6 +97,7 @@ function Board(props: BoardProps) {
 
 		setOpponentPosition({
 			...opponentPosition,
+			longAxis: props.paddleShortSide * 2,
 			shortAxis: playerY,
 		});
 	}
@@ -109,6 +116,7 @@ function Board(props: BoardProps) {
 
 		setPlayerPosition({
 			...playerPosition,
+			longAxis: props.paddleShortSide * 2,
 			shortAxis: playerY,
 		});
 	}

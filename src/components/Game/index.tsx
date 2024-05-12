@@ -127,10 +127,26 @@ function Game() {
 	function handlePageSizeChange() {
 		if (!visualViewport) return;
 
-		setBoardShortAxis(visualViewport.height);
-		setBoardLongAxis(visualViewport.width);
-		setHeaderHeight(visualViewport.height);
-		setHeaderWidth(visualViewport.width);
+		setBoardShortAxis(
+			visualViewport.height > visualViewport.width
+				? visualViewport.width * 0.6
+				: visualViewport.height * 0.6
+		);
+		setBoardLongAxis(
+			visualViewport.height > visualViewport.width
+				? visualViewport.height * 0.6
+				: visualViewport.width * 0.6
+		);
+		setHeaderHeight(
+			visualViewport.height > visualViewport.width
+				? visualViewport.width * 0.25
+				: visualViewport.height * 0.25
+		);
+		setHeaderWidth(
+			visualViewport.height > visualViewport.width
+				? visualViewport.height * 0.6
+				: visualViewport.width * 0.6
+		);
 		setPaddleWidth(20);
 		setPaddleHeight(100);
 		setBallSize(20);
