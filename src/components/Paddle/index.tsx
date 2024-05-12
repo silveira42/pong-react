@@ -1,6 +1,7 @@
+import { PaddleProps } from './PaddleProps';
 import './styles.css';
 
-export default function Paddle(props) {
+export default function Paddle(props: PaddleProps) {
 	return (
 		<div
 			className='paddle'

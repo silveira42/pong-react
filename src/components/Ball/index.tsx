@@ -1,6 +1,7 @@
+import { BallProps } from './BallProps';
 import './styles.css';
 
-function Ball(props) {
+function Ball(props: BallProps) {
 	return (
 		<div
 			className='ball'
