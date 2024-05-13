@@ -5,6 +5,10 @@ export type GameSettingsType = {
 	headerLongAxis: number;
 	playerSpeed: number;
 	playerSpeedStep: number;
+	playerOneUpKey: string;
+	playerOneDownKey: string;
+	playerTwoUpKey: string;
+	playerTwoDownKey: string;
 	ballSpeed: number;
 	ballSpeedStep: number;
 	opponentDifficulty: number;

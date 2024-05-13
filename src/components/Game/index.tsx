@@ -25,6 +25,10 @@ const gameSettings: GameSettingsType = {
 			: visualViewport.width * 0.6,
 	playerSpeed: 10,
 	playerSpeedStep: 1,
+	playerOneUpKey: 'w',
+	playerOneDownKey: 's',
+	playerTwoUpKey: 'ArrowUp',
+	playerTwoDownKey: 'ArrowDown',
 	ballSpeed: 4,
 	ballSpeedStep: 0.5,
 	opponentDifficulty: 2,
@@ -33,20 +37,6 @@ const gameSettings: GameSettingsType = {
 	paddleShortSide: 20,
 	paddleLongSide: 100,
 	ballSize: 20,
-};
-
-const initialBallPosition = {
-	longAxis: gameSettings.boardLongAxis / 2,
-	shortAxis: gameSettings.boardShortAxis / 2 - gameSettings.ballSize / 2,
-};
-const initialBallVelocity = { longAxis: 1, shortAxis: 1 };
-const initialPlayerPosition = {
-	longAxis: gameSettings.paddleShortSide * 2,
-	shortAxis: gameSettings.boardShortAxis / 2 - gameSettings.paddleLongSide / 2,
-};
-const initialOpponentPosition = {
-	longAxis: gameSettings.boardLongAxis - gameSettings.paddleShortSide * 3,
-	shortAxis: gameSettings.boardShortAxis / 2 - gameSettings.paddleLongSide / 2,
 };
 
 const initialScore = {
@@ -78,6 +68,18 @@ function Game() {
 	const [ballSpeed, setBallSpeed] = React.useState(gameSettings.ballSpeed);
 	const [playerSpeed, setPlayerSpeed] = React.useState(
 		gameSettings.playerSpeed
+	);
+	const [playerOneUpKey, setPlayerOneUpKey] = React.useState(
+		gameSettings.playerOneUpKey
+	);
+	const [playerOneDownKey, setPlayerOneDownKey] = React.useState(
+		gameSettings.playerOneDownKey
+	);
+	const [playerTwoUpKey, setPlayerTwoUpKey] = React.useState(
+		gameSettings.playerTwoUpKey
+	);
+	const [playerTwoDownKey, setPlayerTwoDownKey] = React.useState(
+		gameSettings.playerTwoDownKey
 	);
 	const [opponentMode, setOpponentMode] = React.useState(
 		gameSettings.opponentMode
@@ -224,14 +226,14 @@ function Game() {
 				paddleShortSide={paddleWidth}
 				paddleLongSide={paddleHeight}
 				ballSize={ballSize}
-				initialBallPosition={initialBallPosition}
-				initialBallVelocity={initialBallVelocity}
-				initialPlayerPosition={initialPlayerPosition}
-				initialOpponentPosition={initialOpponentPosition}
 				score={score}
 				isPaused={isPaused}
 				ballSpeed={ballSpeed}
 				playerSpeed={playerSpeed}
+				playerOneUpKey={playerOneUpKey}
+				playerOneDownKey={playerOneDownKey}
+				playerTwoUpKey={playerTwoUpKey}
+				playerTwoDownKey={playerTwoDownKey}
 				opponentDifficulty={opponentDifficulty}
 				opponentMode={opponentMode}
 				handleChangePause={handleChangePause}

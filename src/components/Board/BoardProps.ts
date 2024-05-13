@@ -6,14 +6,14 @@ export type BoardProps = {
 	paddleShortSide: number;
 	paddleLongSide: number;
 	ballSize: number;
-	initialBallPosition: { longAxis: number; shortAxis: number };
-	initialBallVelocity: { longAxis: number; shortAxis: number };
-	initialPlayerPosition: { longAxis: number; shortAxis: number };
-	initialOpponentPosition: { longAxis: number; shortAxis: number };
 	score: { player: number; opponent: number };
 	isPaused: boolean;
 	ballSpeed: number;
 	playerSpeed: number;
+	playerOneUpKey: string;
+	playerOneDownKey: string;
+	playerTwoUpKey: string;
+	playerTwoDownKey: string;
 	opponentDifficulty: number;
 	opponentMode: string;
 	handleChangePause: (newState: boolean) => void;
