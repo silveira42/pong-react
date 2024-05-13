@@ -1,9 +1,20 @@
-import { GameOptionsType } from 'components/Game/GameOptionsType';
-import { GameSettingsType } from 'components/Game/GameSettingsType';
+import { Difficulty } from 'components/Game/Difficulty';
+import {
+	GameMode,
+	OpponentMode,
+	PlayerKeys,
+} from 'components/Game/GameOptionsType';
 
 export type BoardProps = {
-	gameSettings: GameSettingsType;
-	gameOptions: GameOptionsType;
+	gameOrientation: string;
+	boardShortAxis: number;
+	boardLongAxis: number;
+	playerOneKeys: PlayerKeys;
+	playerTwoKeys: PlayerKeys;
+	playerSpeed: number;
+	ballSpeed: number;
+	opponentDifficulty: Difficulty;
+	opponentMode: OpponentMode;
 	score: { player: number; opponent: number };
 	isPaused: boolean;
 	handleChangePause: (newState: boolean) => void;

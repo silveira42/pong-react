@@ -4,11 +4,8 @@ export type GameSettingsType = {
 	boardLongAxis: number;
 	headerShortAxis: number;
 	headerLongAxis: number;
-	paddleShortSide: number;
-	paddleLongSide: number;
 	playerSpeedStep: number;
 	ballSpeedStep: number;
-	ballSize: number;
 };
 
 export type PlayerKeys = {

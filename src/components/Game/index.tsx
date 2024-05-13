@@ -45,11 +45,8 @@ const initialGameSettings: GameSettingsType = {
 		visualViewport.height > visualViewport.width
 			? visualViewport.height * 0.6
 			: visualViewport.width * 0.6,
-	paddleShortSide: 20,
-	paddleLongSide: 100,
 	playerSpeedStep: 1,
 	ballSpeedStep: 0.5,
-	ballSize: 20,
 };
 
 const initialGameOptions: GameOptionsType = {
@@ -163,9 +160,6 @@ export default function Game() {
 				visualViewport.height > visualViewport.width
 					? visualViewport.height * 0.6
 					: visualViewport.width * 0.6,
-			paddleShortSide: 20,
-			paddleLongSide: 100,
-			ballSize: 20,
 		});
 	}
 
@@ -383,10 +377,17 @@ export default function Game() {
 					/>
 					<div className='board'>
 						<Board
-							gameSettings={gameSettings}
+							gameOrientation={gameSettings.gameOrientation}
+							boardShortAxis={gameSettings.boardShortAxis}
+							boardLongAxis={gameSettings.boardLongAxis}
 							score={score}
 							isPaused={isPaused}
-							gameOptions={gameOptions}
+							playerOneKeys={gameOptions.playerOneKeys}
+							playerTwoKeys={gameOptions.playerTwoKeys}
+							playerSpeed={gameOptions.playerSpeed}
+							ballSpeed={gameOptions.ballSpeed}
+							opponentDifficulty={gameOptions.opponentDifficulty}
+							opponentMode={gameOptions.opponentMode}
 							handleChangePause={handleChangePause}
 							handleScoreChange={handleScoreChange}
 						/>
