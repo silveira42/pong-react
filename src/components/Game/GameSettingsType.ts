@@ -1,3 +1,5 @@
+import { Difficulty } from './Difficulty';
+
 export type GameSettingsType = {
 	boardShortAxis: number;
 	boardLongAxis: number;
@@ -11,8 +13,7 @@ export type GameSettingsType = {
 	playerTwoDownKey: string;
 	ballSpeed: number;
 	ballSpeedStep: number;
-	opponentDifficulty: number;
-	opponentDifficultyStep: number;
+	opponentDifficulty: Difficulty;
 	opponentMode: string;
 	paddleShortSide: number;
 	paddleLongSide: number;

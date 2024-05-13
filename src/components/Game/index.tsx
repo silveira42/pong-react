@@ -3,6 +3,7 @@ import Board from '../Board';
 import './styles.css';
 import Header from '../Header';
 import { GameSettingsType } from './GameSettingsType';
+import { Difficulty } from './Difficulty';
 
 if (!visualViewport) throw new Error('visualViewport is not supported');
 
@@ -31,8 +32,7 @@ const gameSettings: GameSettingsType = {
 	playerTwoDownKey: 'ArrowDown',
 	ballSpeed: 4,
 	ballSpeedStep: 0.5,
-	opponentDifficulty: 2,
-	opponentDifficultyStep: 1,
+	opponentDifficulty: Difficulty.Medium,
 	opponentMode: 'machine',
 	paddleShortSide: 20,
 	paddleLongSide: 100,
@@ -170,20 +170,8 @@ function Game() {
 		);
 	}
 
-	function handleOpponentDifficultyIncrease() {
-		setOpponentDifficulty(
-			opponentDifficulty >= 3
-				? opponentDifficulty
-				: opponentDifficulty + gameSettings.opponentDifficultyStep
-		);
-	}
-
-	function handleOpponentDifficultyDecrease() {
-		setOpponentDifficulty(
-			opponentDifficulty <= 1
-				? opponentDifficulty
-				: opponentDifficulty - gameSettings.opponentDifficultyStep
-		);
+	function handleOpponentDifficultyChange(newDifficulty: Difficulty) {
+		setOpponentDifficulty(newDifficulty);
 	}
 
 	function handleBallSpeedIncrease() {
@@ -214,8 +202,7 @@ function Game() {
 				width={headerWidth}
 				handlePlayerSpeedIncrease={handlePlayerSpeedIncrease}
 				handlePlayerSpeedDecrease={handlePlayerSpeedDecrease}
-				handleOpponentDifficultyIncrease={handleOpponentDifficultyIncrease}
-				handleOpponentDifficultyDecrease={handleOpponentDifficultyDecrease}
+				handleOpponentDifficultyChange={handleOpponentDifficultyChange}
 				handleBallSpeedIncrease={handleBallSpeedIncrease}
 				handleBallSpeedDecrease={handleBallSpeedDecrease}
 				handleToggleOpponentMode={handleToggleOpponentMode}

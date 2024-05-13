@@ -3,6 +3,20 @@ import './styles.css';
 import { HeaderProps } from './HeaderProps';
 
 export default function Header(props: HeaderProps) {
+	const onOpponentDifficultyIncrease = () => {
+		if (props.opponentDifficulty === 3) {
+			return;
+		}
+		props.handleOpponentDifficultyChange(props.opponentDifficulty + 1);
+	};
+
+	const onOpponentDifficultyDecrease = () => {
+		if (props.opponentDifficulty === 1) {
+			return;
+		}
+		props.handleOpponentDifficultyChange(props.opponentDifficulty - 1);
+	};
+
 	return (
 		<div
 			className='game-header-container'
@@ -44,7 +58,7 @@ export default function Header(props: HeaderProps) {
 							: 'game-header-button-disabled'
 					}
 					disabled={props.opponentMode === 'machine' ? false : true}
-					onClick={() => props.handleOpponentDifficultyIncrease()}
+					onClick={() => onOpponentDifficultyIncrease()}
 				>
 					Increase difficulty
 				</button>
@@ -55,7 +69,7 @@ export default function Header(props: HeaderProps) {
 							: 'game-header-button-disabled'
 					}
 					disabled={props.opponentMode === 'machine' ? false : true}
-					onClick={() => props.handleOpponentDifficultyDecrease()}
+					onClick={() => onOpponentDifficultyDecrease()}
 				>
 					Decrease difficulty
 				</button>

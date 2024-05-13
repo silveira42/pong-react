@@ -7,6 +7,7 @@ import { useKeyPressEvent } from 'react-use';
 import AABBIntersect from '../../util/aabbIntersect';
 import { BoardProps } from './BoardProps';
 import { PaddleType } from './PaddleType';
+import getMachineSpeed from 'components/Game/getMachineSpeed';
 
 function Board(props: BoardProps) {
 	const initialBallPosition = {
@@ -64,20 +65,7 @@ function Board(props: BoardProps) {
 		let opponentY = currentPaddle.shortAxis;
 
 		// ease the movement towards the ideal position
-		let machineSpeed = 0;
-
-		if (props.opponentDifficulty === 1) {
-			machineSpeed = 0.05;
-		}
-		if (props.opponentDifficulty === 2) {
-			machineSpeed = 0.1;
-		}
-		if (props.opponentDifficulty === 3) {
-			machineSpeed = 0.2;
-		}
-		if (props.opponentDifficulty === 10) {
-			machineSpeed = 1;
-		}
+		const machineSpeed = getMachineSpeed(props.opponentDifficulty);
 
 		opponentY += (destination - opponentY) * machineSpeed;
 

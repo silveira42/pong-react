@@ -1,3 +1,4 @@
+import { Difficulty } from 'components/Game/Difficulty';
 import { ScoreType } from 'components/Game/ScoreType';
 
 export type HeaderProps = {
@@ -10,8 +11,7 @@ export type HeaderProps = {
 	width: number;
 	handlePlayerSpeedIncrease: () => void;
 	handlePlayerSpeedDecrease: () => void;
-	handleOpponentDifficultyIncrease: () => void;
-	handleOpponentDifficultyDecrease: () => void;
+	handleOpponentDifficultyChange: (newDifficulty: Difficulty) => void;
 	handleBallSpeedIncrease: () => void;
 	handleBallSpeedDecrease: () => void;
 	handleToggleOpponentMode: () => void;
