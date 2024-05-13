@@ -1,5 +1,5 @@
 
-.game-header-container {
+.header-container {
 	display: flex;
 	justify-content: space-around;
 	flex-direction: row;
@@ -8,16 +8,7 @@
 	border: #000 2px solid;
 }
 
-.game-header-button {
-	background-color: #fff;
-	color: #000;
-	border: 2px solid #000;
-	padding: 5px 10px;
-	font-size: 10px;
-	cursor: pointer;
-}
-
-.score-container {
+.header-wrapper {
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
@@ -26,6 +17,10 @@
 	width: 20%;
 }
 
-.score {
+.header-score {
+	color: #000;
+}
+
+.header-match-score {
 	color: #000;
 }
