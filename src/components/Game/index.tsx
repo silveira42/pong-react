@@ -95,6 +95,7 @@ export default function Game() {
 		initialGameData.matchScore.opponent.toString()
 	);
 
+	// windows resize event
 	React.useEffect(() => {
 		window.addEventListener('resize', handlePageSizeChange);
 		return () => {
@@ -102,6 +103,7 @@ export default function Game() {
 		};
 	}, []);
 
+	// windows blur and focus event
 	React.useEffect(() => {
 		window.addEventListener(
 			'blur',

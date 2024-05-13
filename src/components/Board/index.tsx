@@ -73,9 +73,22 @@ function Board(props: BoardProps) {
 		}
 	};
 
+	React.useEffect(() => {
+		window.addEventListener('resize', handlePageSizeChange);
+		return () => {
+			window.removeEventListener('resize', handlePageSizeChange);
+		};
+	}, []);
+
 	useKeyPressEvent('p', () => {
 		props.handleChangePause(!props.isPaused);
 	});
+
+	function handlePageSizeChange() {
+		setPaddleShortSide(20);
+		setPaddleLongSide(100);
+		setBallSize(20);
+	}
 
 	function updateMachine(
 		currentPaddle: PaddleType,
