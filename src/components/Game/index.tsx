@@ -4,6 +4,14 @@ import './styles.css';
 import Header from '../Header';
 import { GameSettingsType } from './GameSettingsType';
 import { Difficulty } from './Difficulty';
+import {
+	GameMode,
+	GameOptionsType,
+	GameStatus,
+	OpponentMode,
+} from './GameOptionsType';
+import Menu from 'components/Menu';
+import { MenuOption } from 'components/Menu/MenuProps';
 
 if (!visualViewport) throw new Error('visualViewport is not supported');
 
@@ -15,6 +23,8 @@ if (!visualViewport) throw new Error('visualViewport is not supported');
  */
 
 const gameSettings: GameSettingsType = {
+	gameOrientation:
+		visualViewport.height > visualViewport.width ? 'vertical' : 'horizontal',
 	boardShortAxis:
 		visualViewport.height > visualViewport.width
 			? visualViewport.width * 0.6
@@ -31,10 +41,14 @@ const gameSettings: GameSettingsType = {
 		visualViewport.height > visualViewport.width
 			? visualViewport.height * 0.6
 			: visualViewport.width * 0.6,
-	gameOrientation:
-		visualViewport.height > visualViewport.width ? 'vertical' : 'horizontal',
-	playerSpeed: 10,
+	paddleShortSide: 20,
+	paddleLongSide: 100,
 	playerSpeedStep: 1,
+	ballSpeedStep: 0.5,
+	ballSize: 20,
+};
+
+const initialGameOptions: GameOptionsType = {
 	playerOneKeys: {
 		upKey: 'w',
 		downKey: 's',
@@ -47,13 +61,12 @@ const gameSettings: GameSettingsType = {
 		leftKey: 'ArrowLeft',
 		rightKey: 'ArrowRight',
 	},
+	playerSpeed: 10,
 	ballSpeed: 4,
-	ballSpeedStep: 0.5,
 	opponentDifficulty: Difficulty.Medium,
-	opponentMode: 'machine',
-	paddleShortSide: 20,
-	paddleLongSide: 100,
-	ballSize: 20,
+	opponentMode: OpponentMode.Machine,
+	gameMode: GameMode.Infinite,
+	goalsPerMatch: 10,
 };
 
 const initialScore = {
@@ -85,26 +98,13 @@ function Game() {
 		gameSettings.paddleLongSide
 	);
 	const [ballSize, setBallSize] = React.useState(gameSettings.ballSize);
-	const [ballSpeed, setBallSpeed] = React.useState(gameSettings.ballSpeed);
-	const [playerSpeed, setPlayerSpeed] = React.useState(
-		gameSettings.playerSpeed
-	);
-	const [playerOneKeys, setPlayerOneKeys] = React.useState(
-		gameSettings.playerOneKeys
-	);
-	const [playerTwoKeys, setplayerTwoKeys] = React.useState(
-		gameSettings.playerTwoKeys
-	);
-	const [opponentMode, setOpponentMode] = React.useState(
-		gameSettings.opponentMode
-	);
-	const [opponentDifficulty, setOpponentDifficulty] = React.useState(
-		gameSettings.opponentDifficulty
-	);
+
+	const [gameOptions, setGameOptions] = React.useState(initialGameOptions);
 
 	// Game data state
+	const [gameStatus, setGameStatus] = React.useState(GameStatus.InitialScreen);
 	const [score, setScore] = React.useState(initialScore);
-	const [isPaused, setIsPaused] = React.useState(true);
+	const [isPaused, setIsPaused] = React.useState(false);
 
 	React.useEffect(() => {
 		window.addEventListener('resize', handlePageSizeChange);
@@ -131,14 +131,6 @@ function Game() {
 			);
 		};
 	}, []);
-
-	function handleChangePause(newState: boolean) {
-		setIsPaused(newState);
-	}
-
-	function handleScoreChange(newScore: { player: number; opponent: number }) {
-		setScore(newScore);
-	}
 
 	function handlePageSizeChange() {
 		if (!visualViewport) return;
@@ -171,79 +163,186 @@ function Game() {
 		setBallSize(20);
 	}
 
-	function handlePlayerSpeedIncrease() {
-		setPlayerSpeed(
-			playerSpeed >= 15
-				? playerSpeed
-				: playerSpeed + gameSettings.playerSpeedStep
-		);
+	function handleChangePause(newState: boolean) {
+		setIsPaused(newState);
 	}
 
-	function handlePlayerSpeedDecrease() {
-		setPlayerSpeed(
-			playerSpeed <= 5
-				? playerSpeed
-				: playerSpeed - gameSettings.playerSpeedStep
-		);
+	function handleScoreChange(newScore: { player: number; opponent: number }) {
+		setScore(newScore);
+	}
+
+	function handlePlayerSpeedChange(newSpeed: number) {
+		setGameOptions(prev => ({
+			...prev,
+			playerSpeed: newSpeed,
+		}));
 	}
 
 	function handleOpponentDifficultyChange(newDifficulty: Difficulty) {
-		setOpponentDifficulty(newDifficulty);
+		setGameOptions(prev => ({
+			...prev,
+			opponentDifficulty: newDifficulty,
+		}));
 	}
 
-	function handleBallSpeedIncrease() {
-		setBallSpeed(
-			ballSpeed >= 6 ? ballSpeed : ballSpeed + gameSettings.ballSpeedStep
-		);
+	function handleBallSpeedChange(newSpeed: number) {
+		setGameOptions(prev => ({
+			...prev,
+			ballSpeed: newSpeed,
+		}));
 	}
 
-	function handleBallSpeedDecrease() {
-		setBallSpeed(
-			ballSpeed <= 1 ? ballSpeed : ballSpeed - gameSettings.ballSpeedStep
-		);
+	function handleChooseOpponentMode(opponentMode: string) {
+		setGameOptions(prev => ({
+			...prev,
+			opponentMode:
+				opponentMode === 'machine' ? OpponentMode.Machine : OpponentMode.Player,
+		}));
+		setGameStatus(GameStatus.SelectKeys);
 	}
 
-	function handleToggleOpponentMode() {
-		setOpponentMode(opponentMode === 'machine' ? 'player' : 'machine');
+	function handleChooseKeys(keys: string) {
+		setGameOptions(prev => ({
+			...prev,
+			playerOneKeys:
+				keys === 'wasd'
+					? { upKey: 'w', downKey: 's', leftKey: 'a', rightKey: 'd' }
+					: {
+							upKey: 'ArrowUp',
+							downKey: 'ArrowDown',
+							leftKey: 'ArrowLeft',
+							rightKey: 'ArrowRight',
+					  },
+		}));
+		setGameStatus(GameStatus.SelectGameMode);
 	}
 
-	return (
-		<div className='game-container'>
-			<Header
-				score={score}
-				playerSpeed={playerSpeed}
-				opponentDifficulty={opponentDifficulty}
-				ballSpeed={ballSpeed}
-				opponentMode={opponentMode}
-				height={headerHeight}
-				width={headerWidth}
-				handlePlayerSpeedIncrease={handlePlayerSpeedIncrease}
-				handlePlayerSpeedDecrease={handlePlayerSpeedDecrease}
-				handleOpponentDifficultyChange={handleOpponentDifficultyChange}
-				handleBallSpeedIncrease={handleBallSpeedIncrease}
-				handleBallSpeedDecrease={handleBallSpeedDecrease}
-				handleToggleOpponentMode={handleToggleOpponentMode}
-			/>
-			<Board
-				shortAxis={boardShortAxis}
-				longAxis={boardLongAxis}
-				paddleShortSide={paddleWidth}
-				paddleLongSide={paddleHeight}
-				ballSize={ballSize}
-				score={score}
-				isPaused={isPaused}
-				ballSpeed={ballSpeed}
-				playerSpeed={playerSpeed}
-				playerOneKeys={playerOneKeys}
-				playerTwoKeys={playerTwoKeys}
-				opponentDifficulty={opponentDifficulty}
-				opponentMode={opponentMode}
-				gameOrientation={gameOrientation}
-				handleChangePause={handleChangePause}
-				handleScoreChange={handleScoreChange}
-			/>
-		</div>
-	);
+	function handleChooseGameMode(gameMode: string) {
+		setGameOptions(prev => ({
+			...prev,
+			gameMode:
+				gameMode === GameMode.Match ? GameMode.Match : GameMode.Infinite,
+		}));
+		setGameStatus(GameStatus.Playing);
+	}
+
+	const opponentModeOptions: MenuOption[] = [
+		{
+			key: OpponentMode.Machine,
+			label: 'Machine',
+		},
+		{
+			key: OpponentMode.Player,
+			label: 'Player',
+		},
+	];
+
+	const selectKeysOptions: MenuOption[] = [
+		{
+			key: 'wasd',
+			label: 'WASD',
+		},
+		{
+			key: 'arrows',
+			label: 'Arrows',
+		},
+	];
+
+	const gameModeOptions: MenuOption[] = [
+		{
+			key: GameMode.Match,
+			label: 'Match',
+		},
+		{
+			key: GameMode.Infinite,
+			label: 'Infinite',
+		},
+	];
+
+	switch (gameStatus) {
+		case GameStatus.InitialScreen:
+			return (
+				<div
+					onClick={() => setGameStatus(GameStatus.SelectOpponentMode)}
+					className='game-container'
+				>
+					<Header height={headerHeight} width={headerWidth} score={score} />
+					<Menu
+						title='Welcome!'
+						gameOrientation={gameOrientation}
+						shortAxis={boardShortAxis}
+						longAxis={boardLongAxis}
+					/>
+				</div>
+			);
+		case GameStatus.SelectOpponentMode:
+			return (
+				<div className='game-container'>
+					<Header height={headerHeight} width={headerWidth} score={score} />
+					<Menu
+						gameOrientation={gameOrientation}
+						shortAxis={boardShortAxis}
+						longAxis={boardLongAxis}
+						options={opponentModeOptions}
+						handleSelection={handleChooseOpponentMode}
+					/>
+				</div>
+			);
+		case GameStatus.SelectKeys:
+			return (
+				<div className='game-container'>
+					<Header height={headerHeight} width={headerWidth} score={score} />
+					<Menu
+						gameOrientation={gameOrientation}
+						shortAxis={boardShortAxis}
+						longAxis={boardLongAxis}
+						options={selectKeysOptions}
+						handleSelection={handleChooseKeys}
+					/>
+				</div>
+			);
+		case GameStatus.SelectGameMode:
+			return (
+				<div className='game-container'>
+					<Header height={headerHeight} width={headerWidth} score={score} />
+					<Menu
+						gameOrientation={gameOrientation}
+						shortAxis={boardShortAxis}
+						longAxis={boardLongAxis}
+						options={gameModeOptions}
+						handleSelection={handleChooseGameMode}
+					/>
+				</div>
+			);
+		case GameStatus.Playing:
+			return (
+				<div className='game-container'>
+					<Header height={headerHeight} width={headerWidth} score={score} />
+					<div className='board'>
+						<Board
+							shortAxis={boardShortAxis}
+							longAxis={boardLongAxis}
+							paddleShortSide={paddleWidth}
+							paddleLongSide={paddleHeight}
+							ballSize={ballSize}
+							score={score}
+							isPaused={isPaused}
+							ballSpeed={gameOptions.ballSpeed}
+							playerSpeed={gameOptions.playerSpeed}
+							playerOneKeys={gameOptions.playerOneKeys}
+							playerTwoKeys={gameOptions.playerTwoKeys}
+							opponentDifficulty={gameOptions.opponentDifficulty}
+							opponentMode={gameOptions.opponentMode}
+							gameOrientation={gameOrientation}
+							handleChangePause={handleChangePause}
+							handleScoreChange={handleScoreChange}
+						/>
+					</div>
+				</div>
+			);
+		default:
+			return null;
+	}
 }
 
 export default Game;

@@ -51,15 +51,15 @@ function Board(props: BoardProps) {
 		}
 	};
 
-	const arrowUpPressed = useKeyPress('ArrowUp');
-	const wPressed = useKeyPress('w');
-	const arrowDownPressed = useKeyPress('ArrowDown');
-	const sPressed = useKeyPress('s');
+	const paddleAUpPressed = useKeyPress(paddleA.upKey);
+	const paddleADownPressed = useKeyPress(paddleA.downKey);
+	const paddleALeftPressed = useKeyPress(paddleA.leftKey);
+	const paddleARightPressed = useKeyPress(paddleA.rightKey);
 
-	const arrowLeftPressed = useKeyPress('ArrowLeft');
-	const aPressed = useKeyPress('a');
-	const arrowRightPressed = useKeyPress('ArrowRight');
-	const dPressed = useKeyPress('d');
+	const paddleZUpPressed = useKeyPress(paddleZ.upKey);
+	const paddleZDownPressed = useKeyPress(paddleZ.downKey);
+	const paddleZLeftPressed = useKeyPress(paddleZ.leftKey);
+	const paddleZRightPressed = useKeyPress(paddleZ.rightKey);
 
 	useKeyPressEvent('p', () => {
 		props.handleChangePause(!props.isPaused);
@@ -105,14 +105,22 @@ function Board(props: BoardProps) {
 		let playerShortAxis = currentPaddle.shortAxis;
 
 		if (props.gameOrientation === 'horizontal') {
-			if (currentPaddle.upKey === 'w' ? wPressed : arrowUpPressed)
+			if (currentPaddle.position === 'A' ? paddleAUpPressed : paddleZUpPressed)
 				playerShortAxis += props.playerSpeed;
-			if (currentPaddle.downKey === 's' ? sPressed : arrowDownPressed)
+			if (
+				currentPaddle.position === 'A' ? paddleADownPressed : paddleZDownPressed
+			)
 				playerShortAxis -= props.playerSpeed;
 		} else if (props.gameOrientation === 'vertical') {
-			if (currentPaddle.leftKey === 'a' ? aPressed : arrowLeftPressed)
+			if (
+				currentPaddle.position === 'A' ? paddleALeftPressed : paddleZLeftPressed
+			)
 				playerShortAxis -= props.playerSpeed;
-			if (currentPaddle.rightKey === 'd' ? dPressed : arrowRightPressed)
+			if (
+				currentPaddle.position === 'A'
+					? paddleARightPressed
+					: paddleZRightPressed
+			)
 				playerShortAxis += props.playerSpeed;
 		} else {
 			throw new Error('Invalid game orientation');
@@ -258,7 +266,6 @@ function Board(props: BoardProps) {
 
 	return (
 		<div className='board-container'>
-			<hr />
 			<div
 				className={`board board-${props.gameOrientation}-stripe`}
 				style={{

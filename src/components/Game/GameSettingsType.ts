@@ -1,22 +1,14 @@
-import { Difficulty } from './Difficulty';
-
 export type GameSettingsType = {
+	gameOrientation: string;
 	boardShortAxis: number;
 	boardLongAxis: number;
 	headerShortAxis: number;
 	headerLongAxis: number;
-	playerSpeed: number;
-	playerSpeedStep: number;
-	playerOneKeys: PlayerKeys;
-	playerTwoKeys: PlayerKeys;
-	ballSpeed: number;
-	ballSpeedStep: number;
-	opponentDifficulty: Difficulty;
-	opponentMode: string;
 	paddleShortSide: number;
 	paddleLongSide: number;
+	playerSpeedStep: number;
+	ballSpeedStep: number;
 	ballSize: number;
-	gameOrientation: string;
 };
 
 export type PlayerKeys = {
