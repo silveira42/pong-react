@@ -10,8 +10,14 @@ export default function Header(props: HeaderProps) {
 		>
 			<div className='score-container'>
 				<h2 className='score'>
-					{props.score.player} - {props.score.opponent}
+					Game score {props.score.player} - {props.score.opponent}
 				</h2>
+				{props.showMatchScore ? (
+					<h2 className='score'>
+						Matches score {props.matchScore.player} -{' '}
+						{props.matchScore.opponent}
+					</h2>
+				) : null}
 			</div>
 		</div>
 	);

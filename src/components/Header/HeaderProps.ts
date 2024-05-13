@@ -4,4 +4,6 @@ export type HeaderProps = {
 	height: number;
 	width: number;
 	score: ScoreType;
+	matchScore: ScoreType;
+	showMatchScore: boolean;
 };
