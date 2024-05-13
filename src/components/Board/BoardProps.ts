@@ -1,3 +1,4 @@
+import { PlayerKeys } from 'components/Game/GameSettingsType';
 import { ScoreType } from 'components/Game/ScoreType';
 
 export type BoardProps = {
@@ -10,14 +11,8 @@ export type BoardProps = {
 	isPaused: boolean;
 	ballSpeed: number;
 	playerSpeed: number;
-	playerOneUpKey: string;
-	playerOneDownKey: string;
-	playerTwoUpKey: string;
-	playerTwoDownKey: string;
-	playerOneLeftKey: string;
-	playerOneRightKey: string;
-	playerTwoLeftKey: string;
-	playerTwoRightKey: string;
+	playerOneKeys: PlayerKeys;
+	playerTwoKeys: PlayerKeys;
 	opponentDifficulty: number;
 	opponentMode: string;
 	gameOrientation: string;

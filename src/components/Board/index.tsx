@@ -19,20 +19,20 @@ function Board(props: BoardProps) {
 	const initialPaddleA: PaddleType = {
 		longAxis: props.paddleShortSide * 2,
 		shortAxis: props.shortAxis / 2 - props.paddleLongSide / 2,
-		upKey: props.playerOneUpKey,
-		downKey: props.playerOneDownKey,
-		leftKey: props.playerOneLeftKey,
-		rightKey: props.playerOneRightKey,
+		upKey: props.playerOneKeys.upKey,
+		downKey: props.playerOneKeys.downKey,
+		leftKey: props.playerOneKeys.leftKey,
+		rightKey: props.playerOneKeys.rightKey,
 		position: 'A',
 	};
 
 	const initialPaddleZ: PaddleType = {
 		longAxis: props.longAxis - props.paddleShortSide * 3,
 		shortAxis: props.shortAxis / 2 - props.paddleLongSide / 2,
-		upKey: props.playerTwoUpKey,
-		downKey: props.playerTwoDownKey,
-		leftKey: props.playerTwoLeftKey,
-		rightKey: props.playerTwoRightKey,
+		upKey: props.playerTwoKeys.upKey,
+		downKey: props.playerTwoKeys.downKey,
+		leftKey: props.playerTwoKeys.leftKey,
+		rightKey: props.playerTwoKeys.rightKey,
 		position: 'Z',
 	};
 

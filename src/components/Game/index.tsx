@@ -35,14 +35,18 @@ const gameSettings: GameSettingsType = {
 		visualViewport.height > visualViewport.width ? 'vertical' : 'horizontal',
 	playerSpeed: 10,
 	playerSpeedStep: 1,
-	playerOneUpKey: 'w',
-	playerOneDownKey: 's',
-	playerTwoUpKey: 'ArrowUp',
-	playerTwoDownKey: 'ArrowDown',
-	playerOneLeftKey: 'a',
-	playerOneRightKey: 'd',
-	playerTwoLeftKey: 'ArrowLeft',
-	playerTwoRightKey: 'ArrowRight',
+	playerOneKeys: {
+		upKey: 'w',
+		downKey: 's',
+		leftKey: 'a',
+		rightKey: 'd',
+	},
+	playerTwoKeys: {
+		upKey: 'ArrowUp',
+		downKey: 'ArrowDown',
+		leftKey: 'ArrowLeft',
+		rightKey: 'ArrowRight',
+	},
 	ballSpeed: 4,
 	ballSpeedStep: 0.5,
 	opponentDifficulty: Difficulty.Medium,
@@ -85,29 +89,11 @@ function Game() {
 	const [playerSpeed, setPlayerSpeed] = React.useState(
 		gameSettings.playerSpeed
 	);
-	const [playerOneUpKey, setPlayerOneUpKey] = React.useState(
-		gameSettings.playerOneUpKey
+	const [playerOneKeys, setPlayerOneKeys] = React.useState(
+		gameSettings.playerOneKeys
 	);
-	const [playerOneDownKey, setPlayerOneDownKey] = React.useState(
-		gameSettings.playerOneDownKey
-	);
-	const [playerTwoUpKey, setPlayerTwoUpKey] = React.useState(
-		gameSettings.playerTwoUpKey
-	);
-	const [playerTwoDownKey, setPlayerTwoDownKey] = React.useState(
-		gameSettings.playerTwoDownKey
-	);
-	const [playerOneLeftKey, setplayerOneLeftKey] = React.useState(
-		gameSettings.playerOneLeftKey
-	);
-	const [playerOneRightKey, setplayerOneRightKey] = React.useState(
-		gameSettings.playerOneRightKey
-	);
-	const [playerTwoLeftKey, setplayerTwoLeftKey] = React.useState(
-		gameSettings.playerTwoLeftKey
-	);
-	const [playerTwoRightKey, setplayerTwoRightKey] = React.useState(
-		gameSettings.playerTwoRightKey
+	const [playerTwoKeys, setplayerTwoKeys] = React.useState(
+		gameSettings.playerTwoKeys
 	);
 	const [opponentMode, setOpponentMode] = React.useState(
 		gameSettings.opponentMode
@@ -248,14 +234,8 @@ function Game() {
 				isPaused={isPaused}
 				ballSpeed={ballSpeed}
 				playerSpeed={playerSpeed}
-				playerOneUpKey={playerOneUpKey}
-				playerOneDownKey={playerOneDownKey}
-				playerTwoUpKey={playerTwoUpKey}
-				playerTwoDownKey={playerTwoDownKey}
-				playerOneLeftKey={playerOneLeftKey}
-				playerOneRightKey={playerOneRightKey}
-				playerTwoLeftKey={playerTwoLeftKey}
-				playerTwoRightKey={playerTwoRightKey}
+				playerOneKeys={playerOneKeys}
+				playerTwoKeys={playerTwoKeys}
 				opponentDifficulty={opponentDifficulty}
 				opponentMode={opponentMode}
 				gameOrientation={gameOrientation}
