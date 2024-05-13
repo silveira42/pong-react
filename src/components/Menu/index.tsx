@@ -1,5 +1,5 @@
-import { MenuProps } from './MenuProps';
 import './styles.css';
+import { MenuProps } from './MenuProps';
 
 export default function Menu(props: MenuProps) {
 	return (

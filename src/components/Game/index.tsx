@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import Board from '../Board';
 import './styles.css';
+import Board from '../Board';
 import Header from '../Header';
+import Menu from 'components/Menu';
+import useLocalStorage from 'util/useLocalStorage';
 import { GameSettingsType } from './types/GameSettingsType';
 import { Difficulty } from './enums/Difficulty';
 import { GameOptionsType } from './types/GameOptionsType';
-import Menu from 'components/Menu';
 import { MenuOption } from 'components/Menu/MenuProps';
 import { GameDataType } from './types/GameDataType';
 import { useKeyPressEvent } from 'react-use';
-import useLocalStorage from 'util/useLocalStorage';
 import { GameStatus } from './enums/GameStatus';
 import { GameMode } from './enums/GameMode';
 import { OpponentMode } from './enums/OpponentMode';
@@ -133,7 +133,7 @@ export default function Game() {
 		setOpponentMatchScore(initialGameData.matchScore.opponent);
 	});
 
-	function handlePageSizeChange() {
+	function handlePageSizeChange(): void {
 		if (!visualViewport) return;
 
 		setGameSettings({
@@ -161,11 +161,11 @@ export default function Game() {
 		});
 	}
 
-	function handleChangePause(newState: boolean) {
+	function handleChangePause(newState: boolean): void {
 		setIsPaused(newState);
 	}
 
-	function handleScoreChange(whoScored: string) {
+	function handleScoreChange(whoScored: string): void {
 		const scoreCpy = { ...score };
 
 		scoreCpy.player =
@@ -191,7 +191,7 @@ export default function Game() {
 		}
 	}
 
-	function handleChooseOpponentMode(opponentMode: string) {
+	function handleChooseOpponentMode(opponentMode: string): void {
 		setGameOptions(prev => ({
 			...prev,
 			opponentMode:
@@ -200,7 +200,7 @@ export default function Game() {
 		setGameStatus(GameStatus.SelectKeys);
 	}
 
-	function handleChooseKeys(keys: string) {
+	function handleChooseKeys(keys: string): void {
 		const wasd = { upKey: 'w', downKey: 's', leftKey: 'a', rightKey: 'd' };
 		const arrows = {
 			upKey: 'ArrowUp',
@@ -218,7 +218,7 @@ export default function Game() {
 		setGameStatus(GameStatus.SelectGameMode);
 	}
 
-	function handleChooseGameMode(gameMode: string) {
+	function handleChooseGameMode(gameMode: string): void {
 		setGameOptions(prev => ({
 			...prev,
 			gameMode:
@@ -227,7 +227,7 @@ export default function Game() {
 		setGameStatus(GameStatus.Playing);
 	}
 
-	function handleNextScreen() {
+	function handleNextScreen(): void {
 		setGameStatus(GameStatus.SelectOpponentMode);
 	}
 

@@ -1,13 +1,15 @@
 import React from 'react';
+import { useKeyPressEvent } from 'react-use';
 import './styles.css';
+import { BoardProps } from './BoardProps';
 import Ball from '../Ball';
 import Paddle from '../Paddle';
 import useKeyPress from '../../util/useKeyPress'; // Import the hook
-import { useKeyPressEvent } from 'react-use';
 import AABBIntersect from '../../util/aabbIntersect';
-import { BoardProps } from './BoardProps';
-import { PaddleType } from './types/PaddleType';
 import getMachineSpeed from 'components/Game/getMachineSpeed';
+import { PaddleType } from './types/PaddleType';
+import { BallPositionType } from './types/BallPositionType';
+import { BallVelocityType } from './types/BallVelocityType';
 import { OpponentMode } from 'components/Game/enums/OpponentMode';
 
 function Board(props: BoardProps) {
@@ -18,12 +20,12 @@ function Board(props: BoardProps) {
 	const [lastServePaddleA, setLastServePaddleA] = React.useState(false);
 
 	// Variables to initialize complex states
-	const initialBallPosition = {
+	const initialBallPosition: BallPositionType = {
 		longAxis: props.boardLongAxis / 2,
 		shortAxis: props.boardShortAxis / 2 - ballSize / 2,
 	};
 
-	const initialBallVelocity = { longAxis: 1, shortAxis: 1 };
+	const initialBallVelocity: BallVelocityType = { longAxis: 1, shortAxis: 1 };
 
 	const initialPaddleA: PaddleType = {
 		longAxis: paddleShortSide * 2,
@@ -63,7 +65,7 @@ function Board(props: BoardProps) {
 	const paddleZRightPressed = useKeyPress(paddleZ.rightKey);
 
 	// game loop function
-	const loop = function () {
+	const loop = () => {
 		updateBoard();
 
 		if (props.isPaused) {
@@ -78,7 +80,7 @@ function Board(props: BoardProps) {
 	function updateMachine(
 		currentPaddle: PaddleType,
 		setCurrentPaddle: Function
-	) {
+	): void {
 		// calculate ideal position
 		const destination =
 			ballPosition.shortAxis - (paddleLongSide - ballSize) * 0.5;
@@ -111,7 +113,10 @@ function Board(props: BoardProps) {
 		});
 	}
 
-	function updatePlayer(currentPaddle: PaddleType, setCurrentPaddle: Function) {
+	function updatePlayer(
+		currentPaddle: PaddleType,
+		setCurrentPaddle: React.Dispatch<React.SetStateAction<PaddleType>>
+	): void {
 		let playerShortAxis = currentPaddle.shortAxis;
 
 		if (props.gameOrientation === 'horizontal') {
@@ -157,7 +162,7 @@ function Board(props: BoardProps) {
 		});
 	}
 
-	function serve() {
+	function serve(): void {
 		const ballVelocityCpy = { ...ballVelocity };
 
 		ballVelocityCpy.longAxis = lastServePaddleA ? 1 : -1;
@@ -168,7 +173,7 @@ function Board(props: BoardProps) {
 		setLastServePaddleA(!lastServePaddleA);
 	}
 
-	function onBallMove() {
+	function onBallMove(): void {
 		let ballVelocityCpy = { ...ballVelocity };
 		let ballPositionCpy = { ...ballPosition };
 
@@ -260,7 +265,7 @@ function Board(props: BoardProps) {
 		setBallVelocity(ballVelocityCpy);
 	}
 
-	function updateBoard() {
+	function updateBoard(): void {
 		onBallMove();
 		updatePlayer(paddleA, setPaddleA);
 		props.opponentMode === OpponentMode.Player

@@ -1,5 +1,5 @@
-import { PaddleProps } from './PaddleProps';
 import './styles.css';
+import { PaddleProps } from './PaddleProps';
 
 export default function Paddle(props: PaddleProps) {
 	return (

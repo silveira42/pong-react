@@ -1,5 +1,5 @@
-import { BallProps } from './BallProps';
 import './styles.css';
+import { BallProps } from './BallProps';
 
 function Ball(props: BallProps) {
 	return (
