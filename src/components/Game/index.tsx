@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import Board from '../Board';
 import './styles.css';
@@ -13,6 +14,8 @@ import {
 import Menu from 'components/Menu';
 import { MenuOption } from 'components/Menu/MenuProps';
 import { GameDataType } from './GameDataType';
+import { useKeyPressEvent } from 'react-use';
+import useLocalStorage from 'util/useLocalStorage';
 
 if (!visualViewport) throw new Error('visualViewport is not supported');
 
@@ -67,7 +70,7 @@ const initialGameOptions: GameOptionsType = {
 	opponentDifficulty: Difficulty.Medium,
 	opponentMode: OpponentMode.Machine,
 	gameMode: GameMode.Infinite,
-	goalsPerMatch: 10,
+	goalsPerMatch: 2,
 };
 
 const initialGameData: GameDataType = {
@@ -89,7 +92,18 @@ function Game() {
 
 	// Game data state
 	const [gameStatus, setGameStatus] = React.useState(GameStatus.InitialScreen);
-	const [gameData, setGameData] = React.useState(initialGameData);
+	const [score, setScore] = React.useState(initialGameData.score);
+
+	const [playerMatchScore, setPlayerMatchScore] = useLocalStorage(
+		'playerMatchScore',
+		initialGameData.matchScore.player.toString()
+	);
+
+	const [opponentMatchScore, setOpponentMatchScore] = useLocalStorage(
+		'opponentMatchScore',
+		initialGameData.matchScore.opponent.toString()
+	);
+
 	const [isPaused, setIsPaused] = React.useState(false);
 
 	React.useEffect(() => {
@@ -117,6 +131,18 @@ function Game() {
 			);
 		};
 	}, []);
+
+	useKeyPressEvent('r', () => {
+		setGameStatus(GameStatus.InitialScreen);
+		setGameOptions(initialGameOptions);
+	});
+
+	useKeyPressEvent('R', () => {
+		setGameStatus(GameStatus.InitialScreen);
+		setGameOptions(initialGameOptions);
+		setPlayerMatchScore(initialGameData.matchScore.player);
+		setOpponentMatchScore(initialGameData.matchScore.opponent);
+	});
 
 	function handlePageSizeChange() {
 		if (!visualViewport) return;
@@ -154,42 +180,28 @@ function Game() {
 	}
 
 	function handleScoreChange(whoScored: string) {
-		const scoreCpy = { ...gameData.score };
+		const scoreCpy = { ...score };
 
 		scoreCpy.player =
 			whoScored === 'player' ? scoreCpy.player + 1 : scoreCpy.player;
 		scoreCpy.opponent =
 			whoScored === 'opponent' ? scoreCpy.opponent + 1 : scoreCpy.opponent;
 
+		// Check if the match is over
 		if (
 			scoreCpy.player === gameOptions.goalsPerMatch &&
 			gameOptions.gameMode === GameMode.Match
 		) {
-			setGameData({
-				...gameData,
-				score: initialGameData.score,
-				matchScore: {
-					...gameData.matchScore,
-					player: gameData.matchScore.player + 1,
-				},
-			});
+			setPlayerMatchScore(playerMatchScore + 1);
+			setScore(initialGameData.score);
 		} else if (
 			scoreCpy.opponent === gameOptions.goalsPerMatch &&
 			gameOptions.gameMode === GameMode.Match
 		) {
-			setGameData({
-				...gameData,
-				score: initialGameData.score,
-				matchScore: {
-					...gameData.matchScore,
-					opponent: gameData.matchScore.opponent + 1,
-				},
-			});
+			setOpponentMatchScore(opponentMatchScore + 1);
+			setScore(initialGameData.score);
 		} else {
-			setGameData({
-				...gameData,
-				score: scoreCpy,
-			});
+			setScore(scoreCpy);
 		}
 	}
 
@@ -270,8 +282,11 @@ function Game() {
 					<Header
 						height={gameSettings.headerShortAxis}
 						width={gameSettings.headerLongAxis}
-						score={gameData.score}
-						matchScore={gameData.matchScore}
+						score={score}
+						matchScore={{
+							player: playerMatchScore,
+							opponent: opponentMatchScore,
+						}}
 						showMatchScore={gameOptions.gameMode === GameMode.Match}
 					/>
 					<Menu
@@ -288,8 +303,11 @@ function Game() {
 					<Header
 						height={gameSettings.headerShortAxis}
 						width={gameSettings.headerLongAxis}
-						score={gameData.score}
-						matchScore={gameData.matchScore}
+						score={score}
+						matchScore={{
+							player: playerMatchScore,
+							opponent: opponentMatchScore,
+						}}
 						showMatchScore={gameOptions.gameMode === GameMode.Match}
 					/>
 					<Menu
@@ -307,8 +325,11 @@ function Game() {
 					<Header
 						height={gameSettings.headerShortAxis}
 						width={gameSettings.headerLongAxis}
-						score={gameData.score}
-						matchScore={gameData.matchScore}
+						score={score}
+						matchScore={{
+							player: playerMatchScore,
+							opponent: opponentMatchScore,
+						}}
 						showMatchScore={gameOptions.gameMode === GameMode.Match}
 					/>
 					<Menu
@@ -326,8 +347,11 @@ function Game() {
 					<Header
 						height={gameSettings.headerShortAxis}
 						width={gameSettings.headerLongAxis}
-						score={gameData.score}
-						matchScore={gameData.matchScore}
+						score={score}
+						matchScore={{
+							player: playerMatchScore,
+							opponent: opponentMatchScore,
+						}}
 						showMatchScore={gameOptions.gameMode === GameMode.Match}
 					/>
 					<Menu
@@ -345,14 +369,17 @@ function Game() {
 					<Header
 						height={gameSettings.headerShortAxis}
 						width={gameSettings.headerLongAxis}
-						score={gameData.score}
-						matchScore={gameData.matchScore}
+						score={score}
+						matchScore={{
+							player: playerMatchScore,
+							opponent: opponentMatchScore,
+						}}
 						showMatchScore={gameOptions.gameMode === GameMode.Match}
 					/>
 					<div className='board'>
 						<Board
 							gameSettings={gameSettings}
-							score={gameData.score}
+							score={score}
 							isPaused={isPaused}
 							gameOptions={gameOptions}
 							handleChangePause={handleChangePause}
