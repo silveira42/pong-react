@@ -92,7 +92,7 @@ function Board(props: BoardProps) {
 		opponentY = Math.max(
 			Math.min(
 				opponentY,
-				props.gameSettings.boardLongAxis - props.gameSettings.paddleLongSide
+				props.gameSettings.boardShortAxis - props.gameSettings.paddleLongSide
 			),
 			0
 		);

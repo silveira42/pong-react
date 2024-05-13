@@ -3,8 +3,9 @@ export type MenuProps = {
 	shortAxis: number;
 	longAxis: number;
 	title?: string;
-	handleSelection?: (key: string) => void;
 	options?: MenuOption[];
+	handleSelection?: (key: string) => void;
+	handleClick?: () => void;
 };
 
 export type MenuOption = {

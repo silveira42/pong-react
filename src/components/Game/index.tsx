@@ -65,12 +65,12 @@ const initialGameOptions: GameOptionsType = {
 		leftKey: 'ArrowLeft',
 		rightKey: 'ArrowRight',
 	},
-	playerSpeed: 10,
+	playerSpeed: 15,
 	ballSpeed: 4,
-	opponentDifficulty: Difficulty.Medium,
+	opponentDifficulty: Difficulty.Hard,
 	opponentMode: OpponentMode.Machine,
 	gameMode: GameMode.Infinite,
-	goalsPerMatch: 2,
+	goalsPerMatch: 5,
 };
 
 const initialGameData: GameDataType = {
@@ -84,27 +84,21 @@ const initialGameData: GameDataType = {
 	},
 };
 
-function Game() {
-	// Game settings state
+export default function Game() {
 	const [gameSettings, setGameSettings] = React.useState(initialGameSettings);
-
 	const [gameOptions, setGameOptions] = React.useState(initialGameOptions);
-
-	// Game data state
 	const [gameStatus, setGameStatus] = React.useState(GameStatus.InitialScreen);
 	const [score, setScore] = React.useState(initialGameData.score);
+	const [isPaused, setIsPaused] = React.useState(false);
 
 	const [playerMatchScore, setPlayerMatchScore] = useLocalStorage(
 		'playerMatchScore',
 		initialGameData.matchScore.player.toString()
 	);
-
 	const [opponentMatchScore, setOpponentMatchScore] = useLocalStorage(
 		'opponentMatchScore',
 		initialGameData.matchScore.opponent.toString()
 	);
-
-	const [isPaused, setIsPaused] = React.useState(false);
 
 	React.useEffect(() => {
 		window.addEventListener('resize', handlePageSizeChange);
@@ -215,18 +209,20 @@ function Game() {
 	}
 
 	function handleChooseKeys(keys: string) {
+		const wasd = { upKey: 'w', downKey: 's', leftKey: 'a', rightKey: 'd' };
+		const arrows = {
+			upKey: 'ArrowUp',
+			downKey: 'ArrowDown',
+			leftKey: 'ArrowLeft',
+			rightKey: 'ArrowRight',
+		};
+
 		setGameOptions(prev => ({
 			...prev,
-			playerOneKeys:
-				keys === 'wasd'
-					? { upKey: 'w', downKey: 's', leftKey: 'a', rightKey: 'd' }
-					: {
-							upKey: 'ArrowUp',
-							downKey: 'ArrowDown',
-							leftKey: 'ArrowLeft',
-							rightKey: 'ArrowRight',
-					  },
+			playerOneKeys: keys === 'wasd' ? wasd : arrows,
+			playerTwoKeys: keys === 'wasd' ? arrows : wasd,
 		}));
+
 		setGameStatus(GameStatus.SelectGameMode);
 	}
 
@@ -237,6 +233,10 @@ function Game() {
 				gameMode === GameMode.Match ? GameMode.Match : GameMode.Infinite,
 		}));
 		setGameStatus(GameStatus.Playing);
+	}
+
+	function handleNextScreen() {
+		setGameStatus(GameStatus.SelectOpponentMode);
 	}
 
 	const opponentModeOptions: MenuOption[] = [
@@ -275,10 +275,7 @@ function Game() {
 	switch (gameStatus) {
 		case GameStatus.InitialScreen:
 			return (
-				<div
-					onClick={() => setGameStatus(GameStatus.SelectOpponentMode)}
-					className='game-container'
-				>
+				<div className='game-container'>
 					<Header
 						height={gameSettings.headerShortAxis}
 						width={gameSettings.headerLongAxis}
@@ -294,6 +291,7 @@ function Game() {
 						gameOrientation={gameSettings.gameOrientation}
 						shortAxis={gameSettings.boardShortAxis}
 						longAxis={gameSettings.boardLongAxis}
+						handleClick={handleNextScreen}
 					/>
 				</div>
 			);
@@ -311,6 +309,7 @@ function Game() {
 						showMatchScore={gameOptions.gameMode === GameMode.Match}
 					/>
 					<Menu
+						title='Choose opponent mode:'
 						gameOrientation={gameSettings.gameOrientation}
 						shortAxis={gameSettings.boardShortAxis}
 						longAxis={gameSettings.boardLongAxis}
@@ -333,6 +332,11 @@ function Game() {
 						showMatchScore={gameOptions.gameMode === GameMode.Match}
 					/>
 					<Menu
+						title={
+							gameOptions.opponentMode === OpponentMode.Machine
+								? 'Choose your keys:'
+								: 'Choose player one keys:'
+						}
 						gameOrientation={gameSettings.gameOrientation}
 						shortAxis={gameSettings.boardShortAxis}
 						longAxis={gameSettings.boardLongAxis}
@@ -355,6 +359,7 @@ function Game() {
 						showMatchScore={gameOptions.gameMode === GameMode.Match}
 					/>
 					<Menu
+						title='Choose game mode:'
 						gameOrientation={gameSettings.gameOrientation}
 						shortAxis={gameSettings.boardShortAxis}
 						longAxis={gameSettings.boardLongAxis}
@@ -392,5 +397,3 @@ function Game() {
 			return null;
 	}
 }
-
-export default Game;

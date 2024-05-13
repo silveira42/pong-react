@@ -17,36 +17,6 @@
 	cursor: pointer;
 }
 
-.game-header-button-disabled {
-	background-color: #c5c5c5;
-	color: #8b8b8b;
-	border: 2px solid #000;
-	padding: 5px 10px;
-	font-size: 10px;
-	cursor: not-allowed;
-}
-
-.player-paddle-speed {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	gap: 5px;
-}
-
-.opponent-difficulty {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	gap: 5px;
-}
-
-.ball-speed {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	gap: 5px;
-}
-
 .score-container {
 	display: flex;
 	justify-content: space-around;
