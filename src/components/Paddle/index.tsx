@@ -8,8 +8,8 @@ export default function Paddle(props: PaddleProps) {
 			style={{
 				height: props.height,
 				width: props.width,
-				top: props.position.shortAxis,
-				left: props.position.longAxis,
+				bottom: props.bottom,
+				left: props.left,
 			}}
 		></div>
 	);

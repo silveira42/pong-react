@@ -3,4 +3,7 @@ export type PaddleType = {
 	shortAxis: number;
 	upKey: string;
 	downKey: string;
+	leftKey: string;
+	rightKey: string;
+	position: string;
 };

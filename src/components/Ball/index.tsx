@@ -8,8 +8,8 @@ function Ball(props: BallProps) {
 			style={{
 				height: props.size,
 				width: props.size,
-				top: props.position.shortAxis,
-				left: props.position.longAxis,
+				bottom: props.bottom,
+				left: props.left,
 			}}
 		></div>
 	);

@@ -7,6 +7,13 @@ import { Difficulty } from './Difficulty';
 
 if (!visualViewport) throw new Error('visualViewport is not supported');
 
+/*
+ * Regarding the axis:
+ * The short axis is the smallest of the two dimensions.
+ * For example, if the screen is in portrait mode, the short axis is the width.
+ * The long axis is the main direction of the ball.
+ */
+
 const gameSettings: GameSettingsType = {
 	boardShortAxis:
 		visualViewport.height > visualViewport.width
@@ -24,12 +31,18 @@ const gameSettings: GameSettingsType = {
 		visualViewport.height > visualViewport.width
 			? visualViewport.height * 0.6
 			: visualViewport.width * 0.6,
+	gameOrientation:
+		visualViewport.height > visualViewport.width ? 'vertical' : 'horizontal',
 	playerSpeed: 10,
 	playerSpeedStep: 1,
 	playerOneUpKey: 'w',
 	playerOneDownKey: 's',
 	playerTwoUpKey: 'ArrowUp',
 	playerTwoDownKey: 'ArrowDown',
+	playerOneLeftKey: 'a',
+	playerOneRightKey: 'd',
+	playerTwoLeftKey: 'ArrowLeft',
+	playerTwoRightKey: 'ArrowRight',
 	ballSpeed: 4,
 	ballSpeedStep: 0.5,
 	opponentDifficulty: Difficulty.Medium,
@@ -51,6 +64,9 @@ function Game() {
 	);
 	const [boardLongAxis, setBoardLongAxis] = React.useState(
 		gameSettings.boardLongAxis
+	);
+	const [gameOrientation, setGameOrientation] = React.useState(
+		gameSettings.gameOrientation
 	);
 	const [headerHeight, setHeaderHeight] = React.useState(
 		gameSettings.headerShortAxis
@@ -80,6 +96,18 @@ function Game() {
 	);
 	const [playerTwoDownKey, setPlayerTwoDownKey] = React.useState(
 		gameSettings.playerTwoDownKey
+	);
+	const [playerOneLeftKey, setplayerOneLeftKey] = React.useState(
+		gameSettings.playerOneLeftKey
+	);
+	const [playerOneRightKey, setplayerOneRightKey] = React.useState(
+		gameSettings.playerOneRightKey
+	);
+	const [playerTwoLeftKey, setplayerTwoLeftKey] = React.useState(
+		gameSettings.playerTwoLeftKey
+	);
+	const [playerTwoRightKey, setplayerTwoRightKey] = React.useState(
+		gameSettings.playerTwoRightKey
 	);
 	const [opponentMode, setOpponentMode] = React.useState(
 		gameSettings.opponentMode
@@ -148,6 +176,9 @@ function Game() {
 			visualViewport.height > visualViewport.width
 				? visualViewport.height * 0.6
 				: visualViewport.width * 0.6
+		);
+		setGameOrientation(
+			visualViewport.height > visualViewport.width ? 'vertical' : 'horizontal'
 		);
 		setPaddleWidth(20);
 		setPaddleHeight(100);
@@ -221,8 +252,13 @@ function Game() {
 				playerOneDownKey={playerOneDownKey}
 				playerTwoUpKey={playerTwoUpKey}
 				playerTwoDownKey={playerTwoDownKey}
+				playerOneLeftKey={playerOneLeftKey}
+				playerOneRightKey={playerOneRightKey}
+				playerTwoLeftKey={playerTwoLeftKey}
+				playerTwoRightKey={playerTwoRightKey}
 				opponentDifficulty={opponentDifficulty}
 				opponentMode={opponentMode}
+				gameOrientation={gameOrientation}
 				handleChangePause={handleChangePause}
 				handleScoreChange={handleScoreChange}
 			/>

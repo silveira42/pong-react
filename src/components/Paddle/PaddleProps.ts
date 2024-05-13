@@ -1,8 +1,6 @@
 export type PaddleProps = {
-	position: {
-		longAxis: number;
-		shortAxis: number;
-	};
+	bottom: number;
+	left: number;
 	width: number;
 	height: number;
 };

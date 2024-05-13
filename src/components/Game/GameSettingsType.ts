@@ -11,6 +11,10 @@ export type GameSettingsType = {
 	playerOneDownKey: string;
 	playerTwoUpKey: string;
 	playerTwoDownKey: string;
+	playerOneLeftKey: string;
+	playerOneRightKey: string;
+	playerTwoLeftKey: string;
+	playerTwoRightKey: string;
 	ballSpeed: number;
 	ballSpeedStep: number;
 	opponentDifficulty: Difficulty;
@@ -18,4 +22,5 @@ export type GameSettingsType = {
 	paddleShortSide: number;
 	paddleLongSide: number;
 	ballSize: number;
+	gameOrientation: string;
 };

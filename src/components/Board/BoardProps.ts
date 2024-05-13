@@ -14,8 +14,13 @@ export type BoardProps = {
 	playerOneDownKey: string;
 	playerTwoUpKey: string;
 	playerTwoDownKey: string;
+	playerOneLeftKey: string;
+	playerOneRightKey: string;
+	playerTwoLeftKey: string;
+	playerTwoRightKey: string;
 	opponentDifficulty: number;
 	opponentMode: string;
+	gameOrientation: string;
 	handleChangePause: (newState: boolean) => void;
 	handleScoreChange: (newScore: ScoreType) => void;
 };

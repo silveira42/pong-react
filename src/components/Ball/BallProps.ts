@@ -1,4 +1,5 @@
 export type BallProps = {
-	position: { longAxis: number; shortAxis: number };
+	bottom: number;
+	left: number;
 	size: number;
 };
