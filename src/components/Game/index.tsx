@@ -3,17 +3,17 @@ import React from 'react';
 import Board from '../Board';
 import './styles.css';
 import Header from '../Header';
-import { GameSettingsType } from './GameSettingsType';
-import { Difficulty } from './Difficulty';
-import { GameOptionsType } from './GameOptionsType';
+import { GameSettingsType } from './types/GameSettingsType';
+import { Difficulty } from './enums/Difficulty';
+import { GameOptionsType } from './types/GameOptionsType';
 import Menu from 'components/Menu';
 import { MenuOption } from 'components/Menu/MenuProps';
-import { GameDataType } from './GameDataType';
+import { GameDataType } from './types/GameDataType';
 import { useKeyPressEvent } from 'react-use';
 import useLocalStorage from 'util/useLocalStorage';
-import { GameStatus } from './GameStatus';
-import { GameMode } from './GameMode';
-import { OpponentMode } from './OpponentMode';
+import { GameStatus } from './enums/GameStatus';
+import { GameMode } from './enums/GameMode';
+import { OpponentMode } from './enums/OpponentMode';
 
 if (!visualViewport) throw new Error('visualViewport is not supported');
 

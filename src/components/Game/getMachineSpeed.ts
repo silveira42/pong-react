@@ -1,4 +1,4 @@
-import { Difficulty } from './Difficulty';
+import { Difficulty } from './enums/Difficulty';
 
 const getMachineSpeed = (difficulty: Difficulty) => {
 	switch (difficulty) {

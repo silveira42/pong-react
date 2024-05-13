@@ -6,9 +6,9 @@ import useKeyPress from '../../util/useKeyPress'; // Import the hook
 import { useKeyPressEvent } from 'react-use';
 import AABBIntersect from '../../util/aabbIntersect';
 import { BoardProps } from './BoardProps';
-import { PaddleType } from './PaddleType';
+import { PaddleType } from './types/PaddleType';
 import getMachineSpeed from 'components/Game/getMachineSpeed';
-import { OpponentMode } from 'components/Game/OpponentMode';
+import { OpponentMode } from 'components/Game/enums/OpponentMode';
 
 function Board(props: BoardProps) {
 	// Simple state variables

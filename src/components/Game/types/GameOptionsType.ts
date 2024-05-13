@@ -1,6 +1,6 @@
-import { Difficulty } from './Difficulty';
-import { GameMode } from './GameMode';
-import { OpponentMode } from './OpponentMode';
+import { Difficulty } from '../enums/Difficulty';
+import { GameMode } from '../enums/GameMode';
+import { OpponentMode } from '../enums/OpponentMode';
 import { PlayerKeys } from './PlayerKeysType';
 
 export type GameOptionsType = {

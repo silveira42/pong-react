@@ -1,4 +1,4 @@
-import { ScoreType } from 'components/Game/ScoreType';
+import { ScoreType } from 'components/Game/types/ScoreType';
 
 export type HeaderProps = {
 	height: number;
