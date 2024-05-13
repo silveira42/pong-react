@@ -1,4 +1,7 @@
 import { Difficulty } from './Difficulty';
+import { GameMode } from './GameMode';
+import { OpponentMode } from './OpponentMode';
+import { PlayerKeys } from './PlayerKeysType';
 
 export type GameOptionsType = {
 	playerOneKeys: PlayerKeys;
@@ -10,29 +13,3 @@ export type GameOptionsType = {
 	gameMode: GameMode;
 	goalsPerMatch: number;
 };
-
-export type PlayerKeys = {
-	upKey: string;
-	downKey: string;
-	leftKey: string;
-	rightKey: string;
-};
-
-export enum GameMode {
-	Match = 'match',
-	Infinite = 'infinite',
-}
-
-export enum OpponentMode {
-	Machine = 'machine',
-	Player = 'opponent',
-}
-
-export enum GameStatus {
-	InitialScreen = 0,
-	SelectOpponentMode = 1,
-	SelectKeys = 2,
-	SelectGameMode = 3,
-	Playing = 4,
-	GameOver = 5,
-}

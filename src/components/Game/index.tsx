@@ -5,17 +5,15 @@ import './styles.css';
 import Header from '../Header';
 import { GameSettingsType } from './GameSettingsType';
 import { Difficulty } from './Difficulty';
-import {
-	GameMode,
-	GameOptionsType,
-	GameStatus,
-	OpponentMode,
-} from './GameOptionsType';
+import { GameOptionsType } from './GameOptionsType';
 import Menu from 'components/Menu';
 import { MenuOption } from 'components/Menu/MenuProps';
 import { GameDataType } from './GameDataType';
 import { useKeyPressEvent } from 'react-use';
 import useLocalStorage from 'util/useLocalStorage';
+import { GameStatus } from './GameStatus';
+import { GameMode } from './GameMode';
+import { OpponentMode } from './OpponentMode';
 
 if (!visualViewport) throw new Error('visualViewport is not supported');
 

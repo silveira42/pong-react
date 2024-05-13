@@ -7,10 +7,3 @@ export type GameSettingsType = {
 	playerSpeedStep: number;
 	ballSpeedStep: number;
 };
-
-export type PlayerKeys = {
-	upKey: string;
-	downKey: string;
-	leftKey: string;
-	rightKey: string;
-};

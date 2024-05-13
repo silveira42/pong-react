@@ -8,7 +8,7 @@ import AABBIntersect from '../../util/aabbIntersect';
 import { BoardProps } from './BoardProps';
 import { PaddleType } from './PaddleType';
 import getMachineSpeed from 'components/Game/getMachineSpeed';
-import { OpponentMode } from 'components/Game/GameOptionsType';
+import { OpponentMode } from 'components/Game/OpponentMode';
 
 function Board(props: BoardProps) {
 	// Simple state variables
