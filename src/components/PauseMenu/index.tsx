@@ -19,15 +19,12 @@ export default function PauseMenu(props: PauseMenuProps) {
 		props.handleChangeGoalsPerMatch(newGoalsPerMatch);
 	}
 
-	function handleChoosePlayerOneKeys(e: any) {
-		const newPlayerOneKeys = e.target.checked === true ? 'arrows' : 'wasd';
+	function handleChoosePlayerOneKeys(newPlayerOneKeys: string) {
 		setPlayerOneKeys(newPlayerOneKeys);
 		props.handleChooseKeys(newPlayerOneKeys);
 	}
 
-	function handleChooseGameMode(e: any) {
-		const newGameMode: GameMode =
-			e.target.checked === true ? GameMode.Infinite : GameMode.Match;
+	function handleChooseGameMode(newGameMode: GameMode) {
 		setGameMode(newGameMode);
 		props.handleChooseGameMode(newGameMode);
 	}
@@ -112,30 +109,44 @@ export default function PauseMenu(props: PauseMenuProps) {
 				/>
 			</div>
 			<div className='pause-menu-wrapper'>
-				<h3>Infinite mode</h3>
-				<label className='switch'>
-					<input
-						type='checkbox'
-						checked={gameMode === GameMode.Infinite ? true : false}
-						onChange={e => {
-							handleChooseGameMode(e);
-						}}
-					/>
-					<span className='slider'></span>
-				</label>
+				<div className='pause-menu-selector'>
+					<button
+						className={`pause-menu-selector-button pause-menu-selector-button-${
+							gameMode === GameMode.Infinite ? 'selected' : 'unselected'
+						}`}
+						onClick={() => handleChooseGameMode(GameMode.Infinite)}
+					>
+						Infinite
+					</button>
+					<button
+						className={`pause-menu-selector-button pause-menu-selector-button-${
+							gameMode === GameMode.Match ? 'selected' : 'unselected'
+						}`}
+						onClick={() => handleChooseGameMode(GameMode.Match)}
+					>
+						Matches
+					</button>
+				</div>
 			</div>
 			<div className='pause-menu-wrapper'>
-				<h3>Player One use arrows</h3>
-				<label className='switch'>
-					<input
-						type='checkbox'
-						checked={playerOneKeys === 'arrows' ? true : false}
-						onChange={e => {
-							handleChoosePlayerOneKeys(e);
-						}}
-					/>
-					<span className='slider'></span>
-				</label>
+				<div className='pause-menu-selector'>
+					<button
+						className={`pause-menu-selector-button pause-menu-selector-button-${
+							playerOneKeys === 'wasd' ? 'selected' : 'unselected'
+						}`}
+						onClick={() => handleChoosePlayerOneKeys('wasd')}
+					>
+						WASD
+					</button>
+					<button
+						className={`pause-menu-selector-button pause-menu-selector-button-${
+							playerOneKeys === 'arrows' ? 'selected' : 'unselected'
+						}`}
+						onClick={() => handleChoosePlayerOneKeys('arrows')}
+					>
+						Arrows
+					</button>
+				</div>
 			</div>
 			<div className='pause-menu-wrapper'>
 				<h3>Goals per match</h3>
