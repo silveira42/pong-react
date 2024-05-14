@@ -73,6 +73,19 @@ function Board(props: BoardProps) {
 		}
 	};
 
+	function calculateRepositionedLongAxis(currentPaddle: PaddleType): number {
+		if (!visualViewport) return 0;
+		if (currentPaddle.position === 'A') {
+			return paddleShortSide * 2;
+		} else {
+			if (visualViewport.height > visualViewport.width) {
+				return visualViewport.height * 0.6 - paddleShortSide * 3;
+			} else {
+				return visualViewport.width * 0.6 - paddleShortSide * 3;
+			}
+		}
+	}
+
 	React.useEffect(() => {
 		window.addEventListener('resize', handlePageSizeChange);
 		return () => {
@@ -95,94 +108,103 @@ function Board(props: BoardProps) {
 		setCurrentPaddle: Function
 	): void {
 		// calculate ideal position
-		const destination =
+		const idealPaddlePosition =
 			ballPosition.shortAxis - (paddleLongSide - ballSize) * 0.5;
 
-		let opponentY = currentPaddle.shortAxis;
-
 		// ease the movement towards the ideal position
-		const machineSpeed = getMachineSpeed(props.opponentDifficulty);
-
-		opponentY += (destination - opponentY) * machineSpeed;
+		const paddleNewShortAxis =
+			currentPaddle.shortAxis +
+			(idealPaddlePosition - currentPaddle.shortAxis) *
+				getMachineSpeed(props.opponentDifficulty);
 
 		// keep the paddle inside of the canvas
-		opponentY = Math.max(
-			Math.min(opponentY, props.boardShortAxis - paddleLongSide),
+		const paddleNewShortAxisInCanvas = Math.max(
+			Math.min(paddleNewShortAxis, props.boardShortAxis - paddleLongSide),
 			0
 		);
 
-		if (!visualViewport) return;
-		const repositionedLongAxis =
-			currentPaddle.position === 'A'
-				? paddleShortSide * 2
-				: visualViewport.height > visualViewport.width
-				? visualViewport.height * 0.6 - paddleShortSide * 3
-				: visualViewport.width * 0.6 - paddleShortSide * 3;
+		const repositionedLongAxis = calculateRepositionedLongAxis(currentPaddle);
 
 		setCurrentPaddle({
 			...currentPaddle,
 			longAxis: repositionedLongAxis,
-			shortAxis: opponentY,
+			shortAxis: paddleNewShortAxisInCanvas,
 		});
+	}
+
+	function getIncrement(currentPaddle: PaddleType): number {
+		switch (props.gameOrientation) {
+			case 'horizontal':
+				if (currentPaddle.position === 'A') {
+					if (paddleAUpPressed) {
+						return props.playerSpeed;
+					} else if (paddleADownPressed) {
+						return -props.playerSpeed;
+					}
+				} else if (currentPaddle.position === 'Z') {
+					if (paddleZUpPressed) {
+						return props.playerSpeed;
+					} else if (paddleZDownPressed) {
+						return -props.playerSpeed;
+					}
+				} else {
+					throw new Error('Invalid paddle position');
+				}
+				break;
+			case 'vertical':
+				if (currentPaddle.position === 'A') {
+					if (paddleALeftPressed) {
+						return -props.playerSpeed;
+					} else if (paddleARightPressed) {
+						return props.playerSpeed;
+					}
+				} else if (currentPaddle.position === 'Z') {
+					if (paddleZLeftPressed) {
+						return -props.playerSpeed;
+					} else if (paddleZRightPressed) {
+						return props.playerSpeed;
+					}
+				} else {
+					throw new Error('Invalid paddle position');
+				}
+				break;
+			default:
+				throw new Error('Invalid game orientation');
+		}
+		return 0;
 	}
 
 	function updatePlayer(
 		currentPaddle: PaddleType,
 		setCurrentPaddle: React.Dispatch<React.SetStateAction<PaddleType>>
 	): void {
-		let playerShortAxis = currentPaddle.shortAxis;
+		// 1, -1 or 0
+		const increment = getIncrement(currentPaddle);
 
-		if (props.gameOrientation === 'horizontal') {
-			if (currentPaddle.position === 'A' ? paddleAUpPressed : paddleZUpPressed)
-				playerShortAxis += props.playerSpeed;
-			if (
-				currentPaddle.position === 'A' ? paddleADownPressed : paddleZDownPressed
-			)
-				playerShortAxis -= props.playerSpeed;
-		} else if (props.gameOrientation === 'vertical') {
-			if (
-				currentPaddle.position === 'A' ? paddleALeftPressed : paddleZLeftPressed
-			)
-				playerShortAxis -= props.playerSpeed;
-			if (
-				currentPaddle.position === 'A'
-					? paddleARightPressed
-					: paddleZRightPressed
-			)
-				playerShortAxis += props.playerSpeed;
-		} else {
-			throw new Error('Invalid game orientation');
-		}
+		const newPaddleShortAxis = currentPaddle.shortAxis + increment;
+
 		// keep the paddle inside of the canvas
-		playerShortAxis = Math.max(
-			Math.min(playerShortAxis, props.boardShortAxis - paddleLongSide),
+		const newPaddleShortAxisInCanvas = Math.max(
+			Math.min(newPaddleShortAxis, props.boardShortAxis - paddleLongSide),
 			0
 		);
 
-		if (!visualViewport) return;
-
-		const repositionedLongAxis =
-			currentPaddle.position === 'A'
-				? paddleShortSide * 2
-				: visualViewport.height > visualViewport.width
-				? visualViewport.height * 0.6 - paddleShortSide * 3
-				: visualViewport.width * 0.6 - paddleShortSide * 3;
+		const repositionedLongAxis = calculateRepositionedLongAxis(currentPaddle);
 
 		setCurrentPaddle({
 			...currentPaddle,
 			longAxis: repositionedLongAxis,
-			shortAxis: playerShortAxis,
+			shortAxis: newPaddleShortAxisInCanvas,
 		});
 	}
 
 	function serve(): void {
-		const ballVelocityCpy = { ...ballVelocity };
-
-		ballVelocityCpy.longAxis = lastServePaddleA ? 1 : -1;
-		ballVelocityCpy.shortAxis = props.ballSpeed * Math.random();
-
+		setBallVelocity(prevBallVelocity => ({
+			...prevBallVelocity,
+			longAxis: lastServePaddleA ? 1 : -1,
+			shortAxis: props.ballSpeed * Math.random(),
+		}));
 		setBallPosition(initialBallPosition);
-		setBallVelocity(ballVelocityCpy);
 		setLastServePaddleA(!lastServePaddleA);
 	}
 
