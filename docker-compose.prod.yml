@@ -3,14 +3,14 @@ name: silver-pong-prod
 services:
   app:
     container_name: silver-pong-prod-c
-    image: silver-pong-prod-i:1.0
+    image: silver-pong-prod-i:2.0
     build:
       context: .
       dockerfile: Dockerfile.prod
     ports:
         - "8020:80"
 
-# docker image tag silver-pong-prod-i:1.0 silveira42/pong:1.0
-# docker image tag silver-pong-prod-i:1.0 silveira42/pong:latest
-# docker push silveira42/pong:1.0
+# docker image tag silver-pong-prod-i:2.0 silveira42/pong:2.0
+# docker image tag silver-pong-prod-i:2.0 silveira42/pong:latest
+# docker push silveira42/pong:2.0
 # docker push silveira42/pong:latest
