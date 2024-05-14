@@ -54,12 +54,14 @@ const initialGameOptions: GameOptionsType = {
 		downKey: 's',
 		leftKey: 'a',
 		rightKey: 'd',
+		code: 'wasd',
 	},
 	playerTwoKeys: {
 		upKey: 'ArrowUp',
 		downKey: 'ArrowDown',
 		leftKey: 'ArrowLeft',
 		rightKey: 'ArrowRight',
+		code: 'arrows',
 	},
 	playerSpeed: 15,
 	ballSpeed: 4,
@@ -168,6 +170,34 @@ export default function Game() {
 		setIsPaused(newState);
 	}
 
+	function handleChangeGoalsPerMatch(goalsPerMatch: number): void {
+		setGameOptions(prev => ({
+			...prev,
+			goalsPerMatch: goalsPerMatch,
+		}));
+	}
+
+	function handleChangeOpponentDifficulty(newOpponentDifficulty: number): void {
+		setGameOptions(prev => ({
+			...prev,
+			opponentDifficulty: newOpponentDifficulty,
+		}));
+	}
+
+	function handleChangeBallSpeed(newBallSpeed: number): void {
+		setGameOptions(prev => ({
+			...prev,
+			ballSpeed: newBallSpeed,
+		}));
+	}
+
+	function handleChangePlayerSpeed(newPlayerSpeed: number): void {
+		setGameOptions(prev => ({
+			...prev,
+			playerSpeed: newPlayerSpeed,
+		}));
+	}
+
 	function handleScoreChange(whoScored: string): void {
 		const scoreCpy = { ...score };
 
@@ -204,12 +234,19 @@ export default function Game() {
 	}
 
 	function handleChooseKeys(keys: string): void {
-		const wasd = { upKey: 'w', downKey: 's', leftKey: 'a', rightKey: 'd' };
+		const wasd = {
+			upKey: 'w',
+			downKey: 's',
+			leftKey: 'a',
+			rightKey: 'd',
+			code: 'wasd',
+		};
 		const arrows = {
 			upKey: 'ArrowUp',
 			downKey: 'ArrowDown',
 			leftKey: 'ArrowLeft',
 			rightKey: 'ArrowRight',
+			code: 'arrows',
 		};
 
 		setGameOptions(prev => ({
@@ -218,7 +255,8 @@ export default function Game() {
 			playerTwoKeys: keys === 'wasd' ? arrows : wasd,
 		}));
 
-		setGameStatus(GameStatus.SelectGameMode);
+		if (gameStatus === GameStatus.SelectKeys)
+			setGameStatus(GameStatus.SelectGameMode);
 	}
 
 	function handleChooseGameMode(gameMode: string): void {
@@ -398,6 +436,18 @@ export default function Game() {
 								gameOrientation={gameSettings.gameOrientation}
 								boardShortAxis={gameSettings.boardShortAxis}
 								boardLongAxis={gameSettings.boardLongAxis}
+								playerSpeed={gameOptions.playerSpeed}
+								handleChangePlayerSpeed={handleChangePlayerSpeed}
+								ballSpeed={gameOptions.ballSpeed}
+								handleChangeBallSpeed={handleChangeBallSpeed}
+								opponentDifficulty={gameOptions.opponentDifficulty}
+								handleChangeOpponentDifficulty={handleChangeOpponentDifficulty}
+								playerOneKeys={gameOptions.playerOneKeys.code}
+								handleChooseKeys={handleChooseKeys}
+								goalsPerMatch={gameOptions.goalsPerMatch}
+								handleChangeGoalsPerMatch={handleChangeGoalsPerMatch}
+								gameMode={gameOptions.gameMode}
+								handleChooseGameMode={handleChooseGameMode}
 							/>
 						) : null}
 					</div>

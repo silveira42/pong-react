@@ -3,4 +3,5 @@ export type PlayerKeys = {
 	downKey: string;
 	leftKey: string;
 	rightKey: string;
+	code: string;
 };
