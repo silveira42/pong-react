@@ -40,6 +40,7 @@
 		overflow: hidden;
 		width: 80px;
 		-webkit-appearance: none;
+		appearance: none;
 		background-color: #000000;
 	}
 
@@ -117,4 +118,43 @@ input[type="range"]::-ms-fill-upper {
 .pause-menu-selector-button-unselected {
 	color: #fff;
 	background-color: #000;
+}
+
+.pause-menu-number-incrementer {
+	background-color: #000;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 10px;
+	justify-content: center;
+	border: 1px solid #fff;
+}
+
+.pause-menu-number-incrementer-button {
+	font-weight: bolder;
+	color: #fff;
+	background-color: #000;
+	border: 1px solid #fff;
+	font-size: medium;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.pause-menu-number-incrementer-button-disabled {
+	background-color: #000;
+	color: #aaa;
+	cursor: not-allowed;
+
+}
+
+.pause-menu-number-incrementer-input {
+	font-weight: bolder;
+	text-align: center;
+	color: #fff;
+	background-color: #000;
+	border: 1px solid #fff;
+	font-size: medium;
+	width: min-content;
+	cursor: text;
+	transition: all 0.2s;
 }

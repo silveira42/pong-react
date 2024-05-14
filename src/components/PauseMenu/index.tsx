@@ -13,8 +13,7 @@ export default function PauseMenu(props: PauseMenuProps) {
 	const [playerOneKeys, setPlayerOneKeys] = React.useState(props.playerOneKeys);
 	const [goalsPerMatch, setGoalsPerMatch] = React.useState(props.goalsPerMatch);
 
-	function handleChooseGoalsPerMatch(e: any) {
-		const newGoalsPerMatch = parseInt(e.target.value);
+	function handleChooseGoalsPerMatch(newGoalsPerMatch: number) {
 		setGoalsPerMatch(newGoalsPerMatch);
 		props.handleChangeGoalsPerMatch(newGoalsPerMatch);
 	}
@@ -150,13 +149,38 @@ export default function PauseMenu(props: PauseMenuProps) {
 			</div>
 			<div className='pause-menu-wrapper'>
 				<h3>Goals per match</h3>
-				<input
-					type='number'
-					value={goalsPerMatch}
-					onChange={e => {
-						handleChooseGoalsPerMatch(e);
-					}}
-				/>
+				<div className='pause-menu-number-incrementer'>
+					<button
+						className={`pause-menu-number-incrementer-button ${
+							goalsPerMatch <= 1
+								? 'pause-menu-number-incrementer-button-disabled'
+								: null
+						}`}
+						onClick={() => handleChooseGoalsPerMatch(goalsPerMatch - 1)}
+					>
+						-
+					</button>
+					<input
+						className='pause-menu-number-incrementer-input'
+						type='number'
+						value={goalsPerMatch}
+						min='1'
+						max={props.maxGoalsPerMatch}
+						onChange={e => {
+							handleChooseGoalsPerMatch(parseInt(e.target.value) || 5);
+						}}
+					/>
+					<button
+						className={`pause-menu-number-incrementer-button ${
+							goalsPerMatch >= props.maxGoalsPerMatch
+								? 'pause-menu-number-incrementer-button-disabled'
+								: null
+						}`}
+						onClick={() => handleChooseGoalsPerMatch(goalsPerMatch + 1)}
+					>
+						+
+					</button>
+				</div>
 			</div>
 		</div>
 	);

@@ -6,4 +6,5 @@ export type GameSettingsType = {
 	headerLongAxis: number;
 	playerSpeedStep: number;
 	ballSpeedStep: number;
+	maxGoalsPerMatch: number;
 };

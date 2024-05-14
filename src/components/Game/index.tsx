@@ -46,6 +46,7 @@ const initialGameSettings: GameSettingsType = {
 			: visualViewport.width * 0.6,
 	playerSpeedStep: 1,
 	ballSpeedStep: 0.5,
+	maxGoalsPerMatch: 100,
 };
 
 const initialGameOptions: GameOptionsType = {
@@ -445,6 +446,7 @@ export default function Game() {
 								playerOneKeys={gameOptions.playerOneKeys.code}
 								handleChooseKeys={handleChooseKeys}
 								goalsPerMatch={gameOptions.goalsPerMatch}
+								maxGoalsPerMatch={gameSettings.maxGoalsPerMatch}
 								handleChangeGoalsPerMatch={handleChangeGoalsPerMatch}
 								gameMode={gameOptions.gameMode}
 								handleChooseGameMode={handleChooseGameMode}
