@@ -73,6 +73,17 @@ function Board(props: BoardProps) {
 		}
 	};
 
+	React.useEffect(() => {
+		window.addEventListener('resize', handlePageSizeChange);
+		return () => {
+			window.removeEventListener('resize', handlePageSizeChange);
+		};
+	}, []);
+
+	useKeyPressEvent('p', () => {
+		props.handleChangePause(!props.isPaused);
+	});
+
 	function calculateRepositionedLongAxis(currentPaddle: PaddleType): number {
 		if (!visualViewport) return 0;
 		if (currentPaddle.position === 'A') {
@@ -86,53 +97,7 @@ function Board(props: BoardProps) {
 		}
 	}
 
-	React.useEffect(() => {
-		window.addEventListener('resize', handlePageSizeChange);
-		return () => {
-			window.removeEventListener('resize', handlePageSizeChange);
-		};
-	}, []);
-
-	useKeyPressEvent('p', () => {
-		props.handleChangePause(!props.isPaused);
-	});
-
-	function handlePageSizeChange() {
-		setPaddleShortSide(20);
-		setPaddleLongSide(100);
-		setBallSize(20);
-	}
-
-	function updateMachine(
-		currentPaddle: PaddleType,
-		setCurrentPaddle: Function
-	): void {
-		// calculate ideal position
-		const idealPaddlePosition =
-			ballPosition.shortAxis - (paddleLongSide - ballSize) * 0.5;
-
-		// ease the movement towards the ideal position
-		const paddleNewShortAxis =
-			currentPaddle.shortAxis +
-			(idealPaddlePosition - currentPaddle.shortAxis) *
-				getMachineSpeed(props.opponentDifficulty);
-
-		// keep the paddle inside of the canvas
-		const paddleNewShortAxisInCanvas = Math.max(
-			Math.min(paddleNewShortAxis, props.boardShortAxis - paddleLongSide),
-			0
-		);
-
-		const repositionedLongAxis = calculateRepositionedLongAxis(currentPaddle);
-
-		setCurrentPaddle({
-			...currentPaddle,
-			longAxis: repositionedLongAxis,
-			shortAxis: paddleNewShortAxisInCanvas,
-		});
-	}
-
-	function getIncrement(currentPaddle: PaddleType): number {
+	function getPlayerPaddleIncrement(currentPaddle: PaddleType): number {
 		switch (props.gameOrientation) {
 			case 'horizontal':
 				if (currentPaddle.position === 'A') {
@@ -174,12 +139,47 @@ function Board(props: BoardProps) {
 		return 0;
 	}
 
+	function handlePageSizeChange() {
+		setPaddleShortSide(20);
+		setPaddleLongSide(100);
+		setBallSize(20);
+	}
+
+	function updateMachine(
+		currentPaddle: PaddleType,
+		setCurrentPaddle: Function
+	): void {
+		// calculate ideal position
+		const idealPaddlePosition =
+			ballPosition.shortAxis - (paddleLongSide - ballSize) * 0.5;
+
+		// ease the movement towards the ideal position
+		const paddleNewShortAxis =
+			currentPaddle.shortAxis +
+			(idealPaddlePosition - currentPaddle.shortAxis) *
+				getMachineSpeed(props.opponentDifficulty);
+
+		// keep the paddle inside of the canvas
+		const paddleNewShortAxisInCanvas = Math.max(
+			Math.min(paddleNewShortAxis, props.boardShortAxis - paddleLongSide),
+			0
+		);
+
+		const repositionedLongAxis = calculateRepositionedLongAxis(currentPaddle);
+
+		setCurrentPaddle({
+			...currentPaddle,
+			longAxis: repositionedLongAxis,
+			shortAxis: paddleNewShortAxisInCanvas,
+		});
+	}
+
 	function updatePlayer(
 		currentPaddle: PaddleType,
 		setCurrentPaddle: React.Dispatch<React.SetStateAction<PaddleType>>
 	): void {
 		// 1, -1 or 0
-		const increment = getIncrement(currentPaddle);
+		const increment = getPlayerPaddleIncrement(currentPaddle);
 
 		const newPaddleShortAxis = currentPaddle.shortAxis + increment;
 
