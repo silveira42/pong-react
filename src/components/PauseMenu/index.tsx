@@ -45,10 +45,10 @@ export default function PauseMenu(props: PauseMenuProps) {
 		setPlayerSpeed(newPlayerSpeed);
 		props.handleChangePlayerSpeed(newPlayerSpeed);
 	}
-
+	console.log('props', props.boardShortAxis);
 	return (
 		<div
-			className='pause-menu'
+			className='pause-menu-container'
 			style={{
 				width:
 					props.gameOrientation === 'horizontal'
@@ -68,118 +68,122 @@ export default function PauseMenu(props: PauseMenuProps) {
 			>
 				Resume
 			</button>
-			<div className='pause-menu-wrapper'>
-				<h3>Player speed</h3>
-				<input
-					className='pause-menu-input-range'
-					type='range'
-					min='5'
-					max='15'
-					value={playerSpeed}
-					onChange={e => {
-						handleChoosePlayerSpeed(e);
-					}}
-				/>
-			</div>
-			<div className='pause-menu-wrapper'>
-				<h3>Ball speed</h3>
-				<input
-					className='pause-menu-input-range'
-					type='range'
-					min='1'
-					max='5'
-					value={ballSpeed}
-					onChange={e => {
-						handleChooseBallSpeed(e);
-					}}
-				/>
-			</div>
-			<div className='pause-menu-wrapper'>
-				<h3>Machine difficulty</h3>
-				<input
-					className='pause-menu-input-range'
-					type='range'
-					min='1'
-					max='3'
-					value={opponentDifficulty}
-					onChange={e => {
-						handleChooseOpponentDifficulty(e);
-					}}
-				/>
-			</div>
-			<div className='pause-menu-wrapper'>
-				<div className='pause-menu-selector'>
-					<button
-						className={`pause-menu-selector-button pause-menu-selector-button-${
-							gameMode === GameMode.Infinite ? 'selected' : 'unselected'
-						}`}
-						onClick={() => handleChooseGameMode(GameMode.Infinite)}
-					>
-						Infinite
-					</button>
-					<button
-						className={`pause-menu-selector-button pause-menu-selector-button-${
-							gameMode === GameMode.Match ? 'selected' : 'unselected'
-						}`}
-						onClick={() => handleChooseGameMode(GameMode.Match)}
-					>
-						Matches
-					</button>
-				</div>
-			</div>
-			<div className='pause-menu-wrapper'>
-				<div className='pause-menu-selector'>
-					<button
-						className={`pause-menu-selector-button pause-menu-selector-button-${
-							playerOneKeys === 'wasd' ? 'selected' : 'unselected'
-						}`}
-						onClick={() => handleChoosePlayerOneKeys('wasd')}
-					>
-						WASD
-					</button>
-					<button
-						className={`pause-menu-selector-button pause-menu-selector-button-${
-							playerOneKeys === 'arrows' ? 'selected' : 'unselected'
-						}`}
-						onClick={() => handleChoosePlayerOneKeys('arrows')}
-					>
-						Arrows
-					</button>
-				</div>
-			</div>
-			<div className='pause-menu-wrapper'>
-				<h3>Goals per match</h3>
-				<div className='pause-menu-number-incrementer'>
-					<button
-						className={`pause-menu-number-incrementer-button ${
-							goalsPerMatch <= 1
-								? 'pause-menu-number-incrementer-button-disabled'
-								: null
-						}`}
-						onClick={() => handleChooseGoalsPerMatch(goalsPerMatch - 1)}
-					>
-						-
-					</button>
+			<div className='pause-menu'>
+				<div className='pause-menu-wrapper'>
+					<h3>Player speed</h3>
 					<input
-						className='pause-menu-number-incrementer-input'
-						type='number'
-						value={goalsPerMatch}
-						min='1'
-						max={props.maxGoalsPerMatch}
+						className='pause-menu-input-range'
+						type='range'
+						min='5'
+						max='15'
+						value={playerSpeed}
 						onChange={e => {
-							handleChooseGoalsPerMatch(parseInt(e.target.value) || 5);
+							handleChoosePlayerSpeed(e);
 						}}
 					/>
-					<button
-						className={`pause-menu-number-incrementer-button ${
-							goalsPerMatch >= props.maxGoalsPerMatch
-								? 'pause-menu-number-incrementer-button-disabled'
-								: null
-						}`}
-						onClick={() => handleChooseGoalsPerMatch(goalsPerMatch + 1)}
-					>
-						+
-					</button>
+				</div>
+				<div className='pause-menu-wrapper'>
+					<h3>Ball speed</h3>
+					<input
+						className='pause-menu-input-range'
+						type='range'
+						min='1'
+						max='5'
+						value={ballSpeed}
+						onChange={e => {
+							handleChooseBallSpeed(e);
+						}}
+					/>
+				</div>
+				<div className='pause-menu-wrapper'>
+					<h3>Machine difficulty</h3>
+					<input
+						className='pause-menu-input-range'
+						type='range'
+						min='1'
+						max='3'
+						value={opponentDifficulty}
+						onChange={e => {
+							handleChooseOpponentDifficulty(e);
+						}}
+					/>
+				</div>
+				<div className='pause-menu-wrapper'>
+					<h3>Game mode</h3>
+					<div className='pause-menu-selector'>
+						<button
+							className={`pause-menu-selector-button pause-menu-selector-button-${
+								gameMode === GameMode.Infinite ? 'selected' : 'unselected'
+							}`}
+							onClick={() => handleChooseGameMode(GameMode.Infinite)}
+						>
+							Infinite
+						</button>
+						<button
+							className={`pause-menu-selector-button pause-menu-selector-button-${
+								gameMode === GameMode.Match ? 'selected' : 'unselected'
+							}`}
+							onClick={() => handleChooseGameMode(GameMode.Match)}
+						>
+							Matches
+						</button>
+					</div>
+				</div>
+				<div className='pause-menu-wrapper'>
+					<h3>Player one keys</h3>
+					<div className='pause-menu-selector'>
+						<button
+							className={`pause-menu-selector-button pause-menu-selector-button-${
+								playerOneKeys === 'wasd' ? 'selected' : 'unselected'
+							}`}
+							onClick={() => handleChoosePlayerOneKeys('wasd')}
+						>
+							WASD
+						</button>
+						<button
+							className={`pause-menu-selector-button pause-menu-selector-button-${
+								playerOneKeys === 'arrows' ? 'selected' : 'unselected'
+							}`}
+							onClick={() => handleChoosePlayerOneKeys('arrows')}
+						>
+							Arrows
+						</button>
+					</div>
+				</div>
+				<div className='pause-menu-wrapper'>
+					<h3>Goals per match</h3>
+					<div className='pause-menu-number-incrementer'>
+						<button
+							className={`pause-menu-number-incrementer-button ${
+								goalsPerMatch <= 1
+									? 'pause-menu-number-incrementer-button-disabled'
+									: null
+							}`}
+							onClick={() => handleChooseGoalsPerMatch(goalsPerMatch - 1)}
+						>
+							-
+						</button>
+						<input
+							className='pause-menu-number-incrementer-input'
+							type='number'
+							value={goalsPerMatch}
+							min='1'
+							max={props.maxGoalsPerMatch}
+							onChange={e => {
+								handleChooseGoalsPerMatch(parseInt(e.target.value) || 5);
+							}}
+						/>
+						<button
+							className={`pause-menu-number-incrementer-button ${
+								goalsPerMatch >= props.maxGoalsPerMatch
+									? 'pause-menu-number-incrementer-button-disabled'
+									: null
+							}`}
+							onClick={() => handleChooseGoalsPerMatch(goalsPerMatch + 1)}
+						>
+							+
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
