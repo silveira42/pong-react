@@ -73,7 +73,11 @@ const initialGameOptions: GameOptionsType = {
 };
 
 const initialGameData: GameDataType = {
-	score: {
+	infiniteMachineScore: {
+		player: 0,
+		opponent: 0,
+	},
+	gameScore: {
 		player: 0,
 		opponent: 0,
 	},
@@ -85,18 +89,17 @@ const initialGameData: GameDataType = {
 
 export default function Game() {
 	const [gameSettings, setGameSettings] = React.useState(initialGameSettings);
-	const [gameOptions, setGameOptions] = React.useState(initialGameOptions);
 	const [gameStatus, setGameStatus] = React.useState(GameStatus.InitialScreen);
-	const [score, setScore] = React.useState(initialGameData.score);
 	const [isPaused, setIsPaused] = React.useState(false);
 
-	const [playerMatchScore, setPlayerMatchScore] = useLocalStorage(
-		'playerMatchScore',
-		initialGameData.matchScore.player.toString()
+	const [gameOptions, setGameOptions] = useLocalStorage<GameOptionsType>(
+		'gameOptions',
+		initialGameOptions
 	);
-	const [opponentMatchScore, setOpponentMatchScore] = useLocalStorage(
-		'opponentMatchScore',
-		initialGameData.matchScore.opponent.toString()
+
+	const [gameData, setGameData] = useLocalStorage<GameDataType>(
+		'gameData',
+		initialGameData
 	);
 
 	// windows resize event
@@ -129,14 +132,13 @@ export default function Game() {
 
 	useKeyPressEvent('r', () => {
 		setGameStatus(GameStatus.InitialScreen);
-		setGameOptions(initialGameOptions);
+		setGameData({ ...initialGameData, matchScore: gameData.matchScore });
 	});
 
 	useKeyPressEvent('R', () => {
 		setGameStatus(GameStatus.InitialScreen);
 		setGameOptions(initialGameOptions);
-		setPlayerMatchScore(initialGameData.matchScore.player);
-		setOpponentMatchScore(initialGameData.matchScore.opponent);
+		setGameData(initialGameData);
 	});
 
 	function handlePageSizeChange(): void {
@@ -172,65 +174,94 @@ export default function Game() {
 	}
 
 	function handleChangeGoalsPerMatch(goalsPerMatch: number): void {
-		setGameOptions(prev => ({
-			...prev,
+		setGameOptions({
+			...gameOptions,
 			goalsPerMatch: goalsPerMatch,
-		}));
+		});
 	}
 
 	function handleChangeOpponentDifficulty(newOpponentDifficulty: number): void {
-		setGameOptions(prev => ({
-			...prev,
+		setGameOptions({
+			...gameOptions,
 			opponentDifficulty: newOpponentDifficulty,
-		}));
+		});
 	}
 
 	function handleChangeBallSpeed(newBallSpeed: number): void {
-		setGameOptions(prev => ({
-			...prev,
+		setGameOptions({
+			...gameOptions,
 			ballSpeed: newBallSpeed,
-		}));
+		});
 	}
 
 	function handleChangePlayerSpeed(newPlayerSpeed: number): void {
-		setGameOptions(prev => ({
-			...prev,
+		setGameOptions({
+			...gameOptions,
 			playerSpeed: newPlayerSpeed,
-		}));
+		});
 	}
 
 	function handleScoreChange(whoScored: string): void {
-		const scoreCpy = { ...score };
-
-		scoreCpy.player =
-			whoScored === 'player' ? scoreCpy.player + 1 : scoreCpy.player;
-		scoreCpy.opponent =
-			whoScored === 'opponent' ? scoreCpy.opponent + 1 : scoreCpy.opponent;
-
-		// Check if the match is over
-		if (
-			scoreCpy.player === gameOptions.goalsPerMatch &&
-			gameOptions.gameMode === GameMode.Match
-		) {
-			setPlayerMatchScore(playerMatchScore + 1);
-			setScore(initialGameData.score);
-		} else if (
-			scoreCpy.opponent === gameOptions.goalsPerMatch &&
-			gameOptions.gameMode === GameMode.Match
-		) {
-			setOpponentMatchScore(opponentMatchScore + 1);
-			setScore(initialGameData.score);
-		} else {
-			setScore(scoreCpy);
+		// In infinite mode
+		if (gameOptions.gameMode === GameMode.Infinite) {
+			const newPlayerScore =
+				whoScored === 'player'
+					? gameData.infiniteMachineScore.player + 1
+					: gameData.infiniteMachineScore.player;
+			const newOpponentScore =
+				whoScored === 'opponent'
+					? gameData.infiniteMachineScore.opponent + 1
+					: gameData.infiniteMachineScore.opponent;
+			setGameData({
+				...gameData,
+				infiniteMachineScore: {
+					player: newPlayerScore,
+					opponent: newOpponentScore,
+				},
+			});
+		} else if (gameOptions.gameMode === GameMode.Match) {
+			const playerWon =
+				gameData.gameScore.player + 1 >= gameOptions.goalsPerMatch;
+			const opponentWon =
+				gameData.gameScore.opponent + 1 >= gameOptions.goalsPerMatch;
+			// Check if the match is over
+			if (playerWon || opponentWon) {
+				setGameData({
+					...gameData,
+					gameScore: initialGameData.gameScore,
+					matchScore: {
+						player: playerWon
+							? gameData.matchScore.player + 1
+							: gameData.matchScore.player,
+						opponent: opponentWon
+							? gameData.matchScore.opponent + 1
+							: gameData.matchScore.opponent,
+					},
+				});
+			} else {
+				setGameData({
+					...gameData,
+					gameScore: {
+						player:
+							whoScored === 'player'
+								? gameData.gameScore.player + 1
+								: gameData.gameScore.player,
+						opponent:
+							whoScored === 'opponent'
+								? gameData.gameScore.opponent + 1
+								: gameData.gameScore.opponent,
+					},
+				});
+			}
 		}
 	}
 
 	function handleChooseOpponentMode(opponentMode: string): void {
-		setGameOptions(prev => ({
-			...prev,
+		setGameOptions({
+			...gameOptions,
 			opponentMode:
 				opponentMode === 'machine' ? OpponentMode.Machine : OpponentMode.Player,
-		}));
+		});
 		setGameStatus(GameStatus.SelectKeys);
 	}
 
@@ -250,22 +281,22 @@ export default function Game() {
 			code: 'arrows',
 		};
 
-		setGameOptions(prev => ({
-			...prev,
+		setGameOptions({
+			...gameOptions,
 			playerOneKeys: keys === 'wasd' ? wasd : arrows,
 			playerTwoKeys: keys === 'wasd' ? arrows : wasd,
-		}));
+		});
 
 		if (gameStatus === GameStatus.SelectKeys)
 			setGameStatus(GameStatus.SelectGameMode);
 	}
 
 	function handleChooseGameMode(gameMode: string): void {
-		setGameOptions(prev => ({
-			...prev,
+		setGameOptions({
+			...gameOptions,
 			gameMode:
 				gameMode === GameMode.Match ? GameMode.Match : GameMode.Infinite,
-		}));
+		});
 		setGameStatus(GameStatus.Playing);
 	}
 
@@ -313,11 +344,12 @@ export default function Game() {
 					<Header
 						height={gameSettings.headerShortAxis}
 						width={gameSettings.headerLongAxis}
-						score={score}
-						matchScore={{
-							player: playerMatchScore,
-							opponent: opponentMatchScore,
-						}}
+						gameScore={
+							gameOptions.gameMode === GameMode.Infinite
+								? gameData.infiniteMachineScore
+								: gameData.gameScore
+						}
+						matchScore={gameData.matchScore}
 						showMatchScore={gameOptions.gameMode === GameMode.Match}
 					/>
 					<Menu
@@ -335,11 +367,12 @@ export default function Game() {
 					<Header
 						height={gameSettings.headerShortAxis}
 						width={gameSettings.headerLongAxis}
-						score={score}
-						matchScore={{
-							player: playerMatchScore,
-							opponent: opponentMatchScore,
-						}}
+						gameScore={
+							gameOptions.gameMode === GameMode.Infinite
+								? gameData.infiniteMachineScore
+								: gameData.gameScore
+						}
+						matchScore={gameData.matchScore}
 						showMatchScore={gameOptions.gameMode === GameMode.Match}
 					/>
 					<Menu
@@ -358,11 +391,12 @@ export default function Game() {
 					<Header
 						height={gameSettings.headerShortAxis}
 						width={gameSettings.headerLongAxis}
-						score={score}
-						matchScore={{
-							player: playerMatchScore,
-							opponent: opponentMatchScore,
-						}}
+						gameScore={
+							gameOptions.gameMode === GameMode.Infinite
+								? gameData.infiniteMachineScore
+								: gameData.gameScore
+						}
+						matchScore={gameData.matchScore}
 						showMatchScore={gameOptions.gameMode === GameMode.Match}
 					/>
 					<Menu
@@ -385,11 +419,12 @@ export default function Game() {
 					<Header
 						height={gameSettings.headerShortAxis}
 						width={gameSettings.headerLongAxis}
-						score={score}
-						matchScore={{
-							player: playerMatchScore,
-							opponent: opponentMatchScore,
-						}}
+						gameScore={
+							gameOptions.gameMode === GameMode.Infinite
+								? gameData.infiniteMachineScore
+								: gameData.gameScore
+						}
+						matchScore={gameData.matchScore}
 						showMatchScore={gameOptions.gameMode === GameMode.Match}
 					/>
 					<Menu
@@ -408,11 +443,12 @@ export default function Game() {
 					<Header
 						height={gameSettings.headerShortAxis}
 						width={gameSettings.headerLongAxis}
-						score={score}
-						matchScore={{
-							player: playerMatchScore,
-							opponent: opponentMatchScore,
-						}}
+						gameScore={
+							gameOptions.gameMode === GameMode.Infinite
+								? gameData.infiniteMachineScore
+								: gameData.gameScore
+						}
+						matchScore={gameData.matchScore}
 						showMatchScore={gameOptions.gameMode === GameMode.Match}
 					/>
 					<div className='board-container'>
@@ -420,7 +456,7 @@ export default function Game() {
 							gameOrientation={gameSettings.gameOrientation}
 							boardShortAxis={gameSettings.boardShortAxis}
 							boardLongAxis={gameSettings.boardLongAxis}
-							score={score}
+							score={gameData.gameScore}
 							isPaused={isPaused}
 							playerOneKeys={gameOptions.playerOneKeys}
 							playerTwoKeys={gameOptions.playerTwoKeys}

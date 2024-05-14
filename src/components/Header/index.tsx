@@ -8,7 +8,7 @@ export default function Header(props: HeaderProps) {
 			style={{ height: props.height, width: props.width }}
 		>
 			<h2 className='header-score'>
-				Game score {props.score.player} - {props.score.opponent}
+				Game score {props.gameScore.player} - {props.gameScore.opponent}
 			</h2>
 			{props.showMatchScore ? (
 				<h2 className='header-score'>
