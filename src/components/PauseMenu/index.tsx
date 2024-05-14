@@ -104,7 +104,7 @@ export default function PauseMenu(props: PauseMenuProps) {
 					className='pause-menu-input-range'
 					type='range'
 					min='1'
-					max='5'
+					max='3'
 					value={opponentDifficulty}
 					onChange={e => {
 						handleChooseOpponentDifficulty(e);
