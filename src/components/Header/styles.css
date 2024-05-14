@@ -7,20 +7,7 @@
 	padding: 10px;
 	border: #000 2px solid;
 }
-
-.header-wrapper {
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-	text-align: center;
-	flex-direction: column;
-	width: 20%;
-}
-
 .header-score {
-	color: #000;
-}
-
-.header-match-score {
+	text-align: center;
 	color: #000;
 }

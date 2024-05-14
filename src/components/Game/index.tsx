@@ -38,8 +38,8 @@ const initialGameSettings: GameSettingsType = {
 			: visualViewport.width * 0.6,
 	headerShortAxis:
 		visualViewport.height > visualViewport.width
-			? visualViewport.width * 0.25
-			: visualViewport.height * 0.25,
+			? visualViewport.width * 0.1
+			: visualViewport.height * 0.1,
 	headerLongAxis:
 		visualViewport.height > visualViewport.width
 			? visualViewport.height * 0.6
