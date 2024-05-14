@@ -14,6 +14,7 @@ import { useKeyPressEvent } from 'react-use';
 import { GameStatus } from './enums/GameStatus';
 import { GameMode } from './enums/GameMode';
 import { OpponentMode } from './enums/OpponentMode';
+import PauseMenu from 'components/PauseMenu';
 
 if (!visualViewport) throw new Error('visualViewport is not supported');
 
@@ -375,7 +376,7 @@ export default function Game() {
 						}}
 						showMatchScore={gameOptions.gameMode === GameMode.Match}
 					/>
-					<div className='board'>
+					<div className='board-container'>
 						<Board
 							gameOrientation={gameSettings.gameOrientation}
 							boardShortAxis={gameSettings.boardShortAxis}
@@ -391,6 +392,14 @@ export default function Game() {
 							handleChangePause={handleChangePause}
 							handleScoreChange={handleScoreChange}
 						/>
+						{isPaused ? (
+							<PauseMenu
+								handleChangePause={handleChangePause}
+								gameOrientation={gameSettings.gameOrientation}
+								boardShortAxis={gameSettings.boardShortAxis}
+								boardLongAxis={gameSettings.boardLongAxis}
+							/>
+						) : null}
 					</div>
 				</div>
 			);

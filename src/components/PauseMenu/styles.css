@@ -1,0 +1,33 @@
+.pause-menu {
+	position: absolute;
+	border: 5px solid #f00;
+	margin: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.pause-menu-wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-around;
+	color: #fff;
+}
+
+.pause-menu-resume-button {
+	background-color: #000;
+	color: #fff;
+	border: 2px solid #fff;
+	padding: 10px 20px;
+	margin: 20px;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+.pause-menu-input-range {
+	background-color: #000;
+	color: #fff;
+	width: 100%;
+}

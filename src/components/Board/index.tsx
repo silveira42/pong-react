@@ -313,88 +313,76 @@ function Board(props: BoardProps) {
 	}
 
 	return (
-		<div className='board-container'>
-			<div
-				className={`board board-${props.gameOrientation}-stripe`}
-				style={{
-					width:
-						props.gameOrientation === 'horizontal'
-							? props.boardLongAxis
-							: props.boardShortAxis,
-					height:
-						props.gameOrientation === 'vertical'
-							? props.boardLongAxis
-							: props.boardShortAxis,
-				}}
-			>
-				<Paddle
-					left={
-						props.gameOrientation === 'horizontal'
-							? paddleA.longAxis
-							: paddleA.shortAxis
-					}
-					bottom={
-						props.gameOrientation === 'horizontal'
-							? paddleA.shortAxis
-							: paddleA.longAxis
-					}
-					height={
-						props.gameOrientation === 'horizontal'
-							? paddleLongSide
-							: paddleShortSide
-					}
-					width={
-						props.gameOrientation === 'vertical'
-							? paddleLongSide
-							: paddleShortSide
-					}
-				/>
-				<Ball
-					left={
-						props.gameOrientation === 'horizontal'
-							? ballPosition.longAxis
-							: ballPosition.shortAxis
-					}
-					bottom={
-						props.gameOrientation === 'horizontal'
-							? ballPosition.shortAxis
-							: ballPosition.longAxis
-					}
-					size={ballSize}
-				/>
-				<Paddle
-					left={
-						props.gameOrientation === 'horizontal'
-							? paddleZ.longAxis
-							: paddleZ.shortAxis
-					}
-					bottom={
-						props.gameOrientation === 'horizontal'
-							? paddleZ.shortAxis
-							: paddleZ.longAxis
-					}
-					height={
-						props.gameOrientation === 'horizontal'
-							? paddleLongSide
-							: paddleShortSide
-					}
-					width={
-						props.gameOrientation === 'vertical'
-							? paddleLongSide
-							: paddleShortSide
-					}
-				/>
-				{props.isPaused ? (
-					<button
-						className='board-resume-button'
-						onClick={() => {
-							props.handleChangePause(false);
-						}}
-					>
-						Resume
-					</button>
-				) : null}
-			</div>
+		<div
+			className={`board board-${props.gameOrientation}-stripe`}
+			style={{
+				width:
+					props.gameOrientation === 'horizontal'
+						? props.boardLongAxis
+						: props.boardShortAxis,
+				height:
+					props.gameOrientation === 'vertical'
+						? props.boardLongAxis
+						: props.boardShortAxis,
+			}}
+		>
+			<Paddle
+				left={
+					props.gameOrientation === 'horizontal'
+						? paddleA.longAxis
+						: paddleA.shortAxis
+				}
+				bottom={
+					props.gameOrientation === 'horizontal'
+						? paddleA.shortAxis
+						: paddleA.longAxis
+				}
+				height={
+					props.gameOrientation === 'horizontal'
+						? paddleLongSide
+						: paddleShortSide
+				}
+				width={
+					props.gameOrientation === 'vertical'
+						? paddleLongSide
+						: paddleShortSide
+				}
+			/>
+			<Ball
+				left={
+					props.gameOrientation === 'horizontal'
+						? ballPosition.longAxis
+						: ballPosition.shortAxis
+				}
+				bottom={
+					props.gameOrientation === 'horizontal'
+						? ballPosition.shortAxis
+						: ballPosition.longAxis
+				}
+				size={ballSize}
+			/>
+			<Paddle
+				left={
+					props.gameOrientation === 'horizontal'
+						? paddleZ.longAxis
+						: paddleZ.shortAxis
+				}
+				bottom={
+					props.gameOrientation === 'horizontal'
+						? paddleZ.shortAxis
+						: paddleZ.longAxis
+				}
+				height={
+					props.gameOrientation === 'horizontal'
+						? paddleLongSide
+						: paddleShortSide
+				}
+				width={
+					props.gameOrientation === 'vertical'
+						? paddleLongSide
+						: paddleShortSide
+				}
+			/>
 		</div>
 	);
 }
