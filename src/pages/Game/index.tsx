@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import './styles.css';
-import Board from '../Board';
-import Header from '../Header';
+import Board from '../../components/Board';
+import Header from '../../components/Header';
 import Menu from 'components/Menu';
 import useLocalStorage from 'util/useLocalStorage';
 import { GameSettingsType } from './types/GameSettingsType';

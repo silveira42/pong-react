@@ -1,6 +1,6 @@
-import { Difficulty } from 'components/Game/enums/Difficulty';
-import { OpponentMode } from 'components/Game/enums/OpponentMode';
-import { PlayerKeys } from 'components/Game/types/PlayerKeysType';
+import { Difficulty } from 'pages/Game/enums/Difficulty';
+import { OpponentMode } from 'pages/Game/enums/OpponentMode';
+import { PlayerKeys } from 'pages/Game/types/PlayerKeysType';
 
 export type BoardProps = {
 	gameOrientation: string;
