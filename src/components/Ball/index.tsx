@@ -1,14 +1,15 @@
 import './styles.css';
+import { BallProps } from './BallProps';
 
-function Ball(props) {
+function Ball(props: BallProps) {
 	return (
 		<div
 			className='ball'
 			style={{
 				height: props.size,
 				width: props.size,
-				top: props.position.y,
-				left: props.position.x,
+				bottom: props.bottom,
+				left: props.left,
 			}}
 		></div>
 	);

@@ -1,35 +1,22 @@
-.board-container {
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	align-items: center;
-	background-color: #fff;
-}
-
 .board {
 	position: relative;
 	margin: 20px;
 	background-color: #000;
-	background-image: linear-gradient(rgb(255, 255, 255) 33%, rgba(0, 0, 0, 0) 0%);
+}
+
+.board-horizontal-stripe {
+	background-image: linear-gradient(rgb(255, 255, 255) 33%, rgba(0, 0, 0, 0)0%);
 	background-position: center;
 	background-size: 3px 20px;
 	background-repeat: repeat-y;
 }
 
-.board-resume-button {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background-color: #000;
-	color: #fff;
-	border: 2px solid #fff;
-	padding: 10px 20px;
-	font-size: 20px;
-	cursor: pointer;
-}
-
-hr {
-  border: none;
-  border-top: 1px dotted black;
+.board-vertical-stripe:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  border-top: 3px dashed rgb(255, 255, 255);
+  width: 100%;
+  transform: translateY(-50%);
 }

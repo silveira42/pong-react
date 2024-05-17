@@ -1,0 +1,14 @@
+
+.header-container {
+	display: flex;
+	justify-content: space-around;
+	flex-direction: row;
+	align-items: center;
+	padding: 10px;
+	border: #000 2px solid;
+}
+
+.header-score {
+	text-align: center;
+	color: #000;
+}

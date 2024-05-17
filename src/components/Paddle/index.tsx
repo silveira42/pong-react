@@ -1,14 +1,15 @@
 import './styles.css';
+import { PaddleProps } from './PaddleProps';
 
-export default function Paddle(props) {
+export default function Paddle(props: PaddleProps) {
 	return (
 		<div
 			className='paddle'
 			style={{
 				height: props.height,
 				width: props.width,
-				top: props.position.y,
-				left: props.position.x,
+				bottom: props.bottom,
+				left: props.left,
 			}}
 		></div>
 	);
