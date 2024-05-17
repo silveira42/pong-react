@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import './styles.css';
-import Board from '../../components/Board';
 import Header from '../../components/Header';
-import Menu from 'components/Menu';
 import useLocalStorage from 'util/useLocalStorage';
 import { GameSettingsType } from './types/GameSettingsType';
 import { Difficulty } from './enums/Difficulty';
@@ -14,7 +12,7 @@ import { useKeyPressEvent } from 'react-use';
 import { GameStatus } from './enums/GameStatus';
 import { GameMode } from './enums/GameMode';
 import { OpponentMode } from './enums/OpponentMode';
-import PauseMenu from 'components/PauseMenu';
+import Game from 'components/Game';
 
 if (!visualViewport) throw new Error('visualViewport is not supported');
 
@@ -87,7 +85,7 @@ const initialGameData: GameDataType = {
 	},
 };
 
-export default function Game() {
+export default function GamePage() {
 	const [gameSettings, setGameSettings] = React.useState(initialGameSettings);
 	const [gameStatus, setGameStatus] = React.useState(GameStatus.InitialScreen);
 	const [isPaused, setIsPaused] = React.useState(false);
@@ -337,161 +335,39 @@ export default function Game() {
 		},
 	];
 
-	switch (gameStatus) {
-		case GameStatus.InitialScreen:
-			return (
-				<div className='game-container'>
-					<Header
-						height={gameSettings.headerShortAxis}
-						width={gameSettings.headerLongAxis}
-						gameScore={
-							gameOptions.gameMode === GameMode.Infinite
-								? gameData.infiniteMachineScore
-								: gameData.gameScore
-						}
-						matchScore={gameData.matchScore}
-						showMatchScore={gameOptions.gameMode === GameMode.Match}
-					/>
-					<Menu
-						title='Welcome!'
-						gameOrientation={gameSettings.gameOrientation}
-						shortAxis={gameSettings.boardShortAxis}
-						longAxis={gameSettings.boardLongAxis}
-						handleClick={handleNextScreen}
-					/>
-				</div>
-			);
-		case GameStatus.SelectOpponentMode:
-			return (
-				<div className='game-container'>
-					<Header
-						height={gameSettings.headerShortAxis}
-						width={gameSettings.headerLongAxis}
-						gameScore={
-							gameOptions.gameMode === GameMode.Infinite
-								? gameData.infiniteMachineScore
-								: gameData.gameScore
-						}
-						matchScore={gameData.matchScore}
-						showMatchScore={gameOptions.gameMode === GameMode.Match}
-					/>
-					<Menu
-						title='Choose opponent mode:'
-						gameOrientation={gameSettings.gameOrientation}
-						shortAxis={gameSettings.boardShortAxis}
-						longAxis={gameSettings.boardLongAxis}
-						options={opponentModeOptions}
-						handleSelection={handleChooseOpponentMode}
-					/>
-				</div>
-			);
-		case GameStatus.SelectKeys:
-			return (
-				<div className='game-container'>
-					<Header
-						height={gameSettings.headerShortAxis}
-						width={gameSettings.headerLongAxis}
-						gameScore={
-							gameOptions.gameMode === GameMode.Infinite
-								? gameData.infiniteMachineScore
-								: gameData.gameScore
-						}
-						matchScore={gameData.matchScore}
-						showMatchScore={gameOptions.gameMode === GameMode.Match}
-					/>
-					<Menu
-						title={
-							gameOptions.opponentMode === OpponentMode.Machine
-								? 'Choose your keys:'
-								: 'Choose player one keys:'
-						}
-						gameOrientation={gameSettings.gameOrientation}
-						shortAxis={gameSettings.boardShortAxis}
-						longAxis={gameSettings.boardLongAxis}
-						options={selectKeysOptions}
-						handleSelection={handleChooseKeys}
-					/>
-				</div>
-			);
-		case GameStatus.SelectGameMode:
-			return (
-				<div className='game-container'>
-					<Header
-						height={gameSettings.headerShortAxis}
-						width={gameSettings.headerLongAxis}
-						gameScore={
-							gameOptions.gameMode === GameMode.Infinite
-								? gameData.infiniteMachineScore
-								: gameData.gameScore
-						}
-						matchScore={gameData.matchScore}
-						showMatchScore={gameOptions.gameMode === GameMode.Match}
-					/>
-					<Menu
-						title='Choose game mode:'
-						gameOrientation={gameSettings.gameOrientation}
-						shortAxis={gameSettings.boardShortAxis}
-						longAxis={gameSettings.boardLongAxis}
-						options={gameModeOptions}
-						handleSelection={handleChooseGameMode}
-					/>
-				</div>
-			);
-		case GameStatus.Playing:
-			return (
-				<div className='game-container'>
-					<Header
-						height={gameSettings.headerShortAxis}
-						width={gameSettings.headerLongAxis}
-						gameScore={
-							gameOptions.gameMode === GameMode.Infinite
-								? gameData.infiniteMachineScore
-								: gameData.gameScore
-						}
-						matchScore={gameData.matchScore}
-						showMatchScore={gameOptions.gameMode === GameMode.Match}
-					/>
-					<div className='board-container'>
-						<Board
-							gameOrientation={gameSettings.gameOrientation}
-							boardShortAxis={gameSettings.boardShortAxis}
-							boardLongAxis={gameSettings.boardLongAxis}
-							score={gameData.gameScore}
-							isPaused={isPaused}
-							playerOneKeys={gameOptions.playerOneKeys}
-							playerTwoKeys={gameOptions.playerTwoKeys}
-							playerSpeed={gameOptions.playerSpeed}
-							ballSpeed={gameOptions.ballSpeed}
-							opponentDifficulty={gameOptions.opponentDifficulty}
-							opponentMode={gameOptions.opponentMode}
-							handleChangePause={handleChangePause}
-							handleScoreChange={handleScoreChange}
-						/>
-						{isPaused ? (
-							<PauseMenu
-								handleChangePause={handleChangePause}
-								gameOrientation={gameSettings.gameOrientation}
-								boardShortAxis={gameSettings.boardShortAxis}
-								boardLongAxis={gameSettings.boardLongAxis}
-								playerSpeed={gameOptions.playerSpeed}
-								handleChangePlayerSpeed={handleChangePlayerSpeed}
-								ballSpeed={gameOptions.ballSpeed}
-								handleChangeBallSpeed={handleChangeBallSpeed}
-								opponentDifficulty={gameOptions.opponentDifficulty}
-								handleChangeOpponentDifficulty={handleChangeOpponentDifficulty}
-								playerOneKeys={gameOptions.playerOneKeys.code}
-								handleChooseKeys={handleChooseKeys}
-								goalsPerMatch={gameOptions.goalsPerMatch}
-								maxGoalsPerMatch={gameSettings.maxGoalsPerMatch}
-								handleChangeGoalsPerMatch={handleChangeGoalsPerMatch}
-								gameMode={gameOptions.gameMode}
-								handleChooseGameMode={handleChooseGameMode}
-							/>
-						) : null}
-					</div>
-				</div>
-			);
-		default:
-			return null;
-	}
+	return (
+		<div className='game-container'>
+			<Header
+				height={gameSettings.headerShortAxis}
+				width={gameSettings.headerLongAxis}
+				gameScore={
+					gameOptions.gameMode === GameMode.Infinite
+						? gameData.infiniteMachineScore
+						: gameData.gameScore
+				}
+				matchScore={gameData.matchScore}
+				showMatchScore={gameOptions.gameMode === GameMode.Match}
+			/>
+			<Game
+				gameSettings={gameSettings}
+				gameStatus={gameStatus}
+				isPaused={isPaused}
+				gameOptions={gameOptions}
+				gameData={gameData}
+				handleNextScreen={handleNextScreen}
+				opponentModeOptions={opponentModeOptions}
+				handleChooseOpponentMode={handleChooseOpponentMode}
+				selectKeysOptions={selectKeysOptions}
+				handleChooseKeys={handleChooseKeys}
+				gameModeOptions={gameModeOptions}
+				handleChooseGameMode={handleChooseGameMode}
+				handleChangePause={handleChangePause}
+				handleScoreChange={handleScoreChange}
+				handleChangePlayerSpeed={handleChangePlayerSpeed}
+				handleChangeBallSpeed={handleChangeBallSpeed}
+				handleChangeOpponentDifficulty={handleChangeOpponentDifficulty}
+				handleChangeGoalsPerMatch={handleChangeGoalsPerMatch}
+			/>
+		</div>
+	);
 }

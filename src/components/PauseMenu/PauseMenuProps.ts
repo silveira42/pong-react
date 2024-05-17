@@ -1,4 +1,4 @@
-import { GameMode } from 'pages/Game/enums/GameMode';
+import { GameMode } from 'pages/GamePage/enums/GameMode';
 
 export type PauseMenuProps = {
 	handleChangePause: (newState: boolean) => void;

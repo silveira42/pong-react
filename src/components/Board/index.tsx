@@ -6,11 +6,11 @@ import Ball from '../Ball';
 import Paddle from '../Paddle';
 import useKeyPress from '../../util/useKeyPress'; // Import the hook
 import AABBIntersect from '../../util/aabbIntersect';
-import getMachineSpeed from 'pages/Game/getMachineSpeed';
+import getMachineSpeed from 'pages/GamePage/getMachineSpeed';
 import { PaddleType } from './types/PaddleType';
 import { BallPositionType } from './types/BallPositionType';
 import { BallVelocityType } from './types/BallVelocityType';
-import { OpponentMode } from 'pages/Game/enums/OpponentMode';
+import { OpponentMode } from 'pages/GamePage/enums/OpponentMode';
 
 function Board(props: BoardProps) {
 	// Simple state variables

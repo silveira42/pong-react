@@ -1,7 +1,7 @@
 import './styles.css';
 import { PauseMenuProps } from './PauseMenuProps';
 import React from 'react';
-import { GameMode } from 'pages/Game/enums/GameMode';
+import { GameMode } from 'pages/GamePage/enums/GameMode';
 
 export default function PauseMenu(props: PauseMenuProps) {
 	const [playerSpeed, setPlayerSpeed] = React.useState(props.playerSpeed);
