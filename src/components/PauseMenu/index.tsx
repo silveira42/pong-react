@@ -45,7 +45,7 @@ export default function PauseMenu(props: PauseMenuProps) {
 		setPlayerSpeed(newPlayerSpeed);
 		props.handleChangePlayerSpeed(newPlayerSpeed);
 	}
-	console.log('props', props.boardShortAxis);
+
 	return (
 		<div
 			className='pause-menu-container'
